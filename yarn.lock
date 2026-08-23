@@ -154,6 +154,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.28.2.tgz#b21affb804cc167c133d95f45b3a1dc1323b9a87"
   integrity sha512-5ebpxr3nWMzrL/rnUI755Jkuee0bHL/Gq0WTF9lvcpv73wAp5eu8MfBUgWK9bhWvZjj7yX8etf/8tI8Ney695g==
 
+"@herb-tools/client@https://pkg.pr.new/marcoroth/herb/@herb-tools/client@cb2c2db":
+  version "0.10.3"
+  resolved "https://pkg.pr.new/marcoroth/herb/@herb-tools/client@cb2c2db#9de1555a05be9c0e375f87cc1f8183146a24de9a"
+
 "@hotwired/stimulus@^3.2.2":
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.2.2.tgz#071aab59c600fed95b97939e605ff261a4251608"

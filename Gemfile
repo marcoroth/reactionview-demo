@@ -66,3 +66,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "herb", github: "marcoroth/herb", branch: "main"
+gem "reactionview", github: "marcoroth/reactionview", branch: "reactivity"
