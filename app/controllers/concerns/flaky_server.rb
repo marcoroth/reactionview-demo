@@ -23,6 +23,8 @@ module FlakyServer
   def refuse_or_stall
     return head :service_unavailable if self.class.refusing
 
-    sleep params.fetch(:delay, DELAY).to_f.clamp(0, MAX_DELAY)
+    if Rails.env.devlopment?
+      sleep params.fetch(:delay, DELAY).to_f.clamp(0, MAX_DELAY)
+    end
   end
 end
