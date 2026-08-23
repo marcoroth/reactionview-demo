@@ -67,5 +67,5 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "herb", github: "marcoroth/herb", branch: "main"
-gem "reactionview", github: "marcoroth/reactionview", branch: "reactivity"
+gem "herb", github: "marcoroth/herb", branch: "slots/client-hydration"
+gem "reactionview", github: "marcoroth/reactionview", branch: "slots/create"

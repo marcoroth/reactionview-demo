@@ -1,0 +1,206 @@
+<%# herb:slots client %>
+<%# herb:state (draft: "", filter: "all", unread: 0, alerting: unread > 3, showing_all: filter == "all", showing_starred: filter == "starred", pending_count: 0, starred_count: 0, total_count: 0, selecting: false, selected_count: 0, confirming_bulk: false) %>
+
+<div
+  class="mx-auto flex h-dvh max-w-2xl flex-col px-4 py-6 [&_.msg[data-pending=true]]:opacity-55 [&_.msg[data-failed=true]]:bg-red-50 [&_.msg[data-failed=true]]:border-red-300 [&_.msg[data-starred=true]]:border-l-amber-500 [&_.msg[data-editing=true]_.view]:hidden [&_.msg[data-starred=true]_.star-on]:inline [&_.msg[data-starred=true]_.star-off]:hidden [&_[aria-pressed=true]]:bg-gray-900 [&_[aria-pressed=true]]:text-white [&_[aria-pressed=true]]:border-gray-900 [&[data-selecting=false]_.select-box]:hidden"
+  data-controller="chat"
+  data-selecting="<%= selecting %>"
+>
+  <header class="mb-6 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+    <h1 class="text-2xl font-bold">Chat</h1>
+
+    <div class="flex flex-wrap items-center gap-2 text-sm">
+      <span class="text-gray-500">Unread</span>
+      <button type="button" data-herb-decrement="unread" class="rounded border px-2">&minus;</button>
+      <span class="w-6 text-center font-mono"><%= unread %></span>
+      <button type="button" data-herb-increment="unread" class="rounded border px-2">+</button>
+      <button type="button" data-herb-increment="unread" data-herb-by="5" class="rounded border px-2">+5</button>
+      <button type="button" data-herb-reset="unread" class="text-gray-400 underline">reset</button>
+
+      <% if alerting %>
+        <span class="rounded bg-amber-100 px-2 py-1 text-amber-800">Lots to read</span>
+      <% end %>
+    </div>
+  </header>
+
+  <nav class="mb-4 flex flex-wrap items-center gap-2 text-sm [&_button]:whitespace-nowrap">
+    <button type="button" data-herb-set="filter=all" aria-pressed="<%= showing_all %>" class="rounded border px-2 py-1">All</button>
+    <button type="button" data-herb-set="filter=starred" aria-pressed="<%= showing_starred %>" class="rounded border px-2 py-1">Starred</button>
+
+    <select data-herb-set="change->filter=$value" class="rounded border px-2 py-1">
+      <option value="all" selected="<%= filter == "all" %>">All</option>
+      <option value="starred" selected="<%= filter == "starred" %>">Starred</option>
+    </select>
+
+    <button type="button" data-herb-toggle="selecting" aria-pressed="<%= selecting %>" class="rounded border px-2 py-1">Select mode</button>
+
+    <span class="w-full text-gray-500 sm:w-auto">
+      <% case filter %>
+      <% when "all" %>
+        Showing everything
+      <% when "starred" %>
+        Showing starred only
+      <% end %>
+    </span>
+  </nav>
+
+  <div class="mb-4 min-h-0 flex-1 overflow-y-auto">
+    <ul data-herb-name="messages" class="space-y-2 list-none">
+    <% @messages.each do |message| %>
+      <%# herb:key message.id %>
+      <%# herb:state (pending: false, failed: false, editing: false, starred: message.starred, confirming: false, selected: false, busy: pending || failed, body_draft: message.body) %>
+
+      <% if pending? %>
+        <% pending_count = pending_count + 1 %>
+      <% end %>
+
+      <% if starred? %>
+        <% starred_count = starred_count + 1 %>
+      <% end %>
+
+      <% if selected? %>
+        <% selected_count = selected_count + 1 %>
+      <% end %>
+
+      <% total_count += 1 %>
+
+      <li
+        id="message_<%= message.id %>"
+        data-message-id="<%= message.id %>"
+        class="msg relative rounded-lg rounded-l-none border border-gray-200 border-l-4 p-3"
+        data-pending="<%= pending %>"
+        data-failed="<%= failed %>"
+        data-starred="<%= starred %>"
+        data-editing="<%= editing %>"
+        data-action="click->chat#rowClicked"
+        hidden="<%= filter == "starred" && starred == false %>"
+      >
+        <div class="view flex items-start justify-between gap-2">
+          <input type="checkbox" checked="<%= selected %>" aria-label="Select message" class="select-box mt-1 mr-2">
+
+          <p class="mb-1 flex-1"><span data-herb-name="body"><%= message.body %></span><span class="ml-1 text-xs text-gray-400"><%= message.edited_at ? "(edited)" : "" %></span></p>
+
+          <button type="button" data-action="chat#toggleStar" aria-label="Star"><span class="star-on hidden text-amber-500">&#9733;</span><span class="star-off text-gray-300">&#9734;</span></button>
+        </div>
+
+        <% if editing? %>
+          <textarea
+            data-chat-target="editor"
+            class="w-full rounded border border-gray-300 p-2"
+            rows="2"
+          ><%= body_draft %></textarea>
+
+          <div class="mt-2 flex gap-2 text-xs">
+            <button type="button" data-action="chat#save" class="rounded bg-gray-900 px-2 py-1 text-white">Save</button>
+            <button type="button" data-herb-set="editing=false" data-herb-reset="body_draft" class="underline">Cancel</button>
+          </div>
+        <% end %>
+
+        <div class="view flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-500">
+          <span><%= message.author %></span>
+
+          <% if pending? %>
+            Sending&hellip;
+          <% elsif failed? %>
+            <span class="text-red-600">Not sent</span>
+            <button type="button" class="underline" data-action="chat#retry">Retry</button>
+            <button type="button" class="underline" data-action="chat#discard">Discard</button>
+          <% else %>
+            <span><%= message.sent_label %></span>
+          <% end %>
+
+          <% unless busy %>
+            <button type="button" data-herb-set="editing=true" class="py-1 underline">Edit</button>
+            <button type="button" data-herb-set="confirming=true" class="py-1 underline">Delete</button>
+          <% end %>
+        </div>
+
+        <% if confirming? %>
+          <div class="absolute inset-0 z-10 flex items-center justify-center gap-3 rounded-lg rounded-l-none bg-white/95 text-sm">
+            <span>Delete this message?</span>
+            <button type="button" data-action="chat#destroy" class="rounded bg-red-600 px-3 py-1 text-white">Delete</button>
+            <button type="button" data-herb-set="confirming=false" class="underline">Cancel</button>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+    </ul>
+
+    <% if filter == "starred" && starred_count == 0 %>
+      <p class="rounded border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
+        No starred messages
+      </p>
+    <% elsif total_count == 0 %>
+      <p class="rounded border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
+        No messages yet
+      </p>
+    <% end %>
+  </div>
+
+  <% if selecting? %>
+    <div class="mb-4 flex flex-wrap items-center gap-2 rounded border border-gray-200 bg-gray-50 p-3 text-sm [&_button]:whitespace-nowrap">
+      <span><%= selected_count %> selected</span>
+
+      <button type="button" data-action="chat#selectAll" class="rounded border px-2 py-1">Select all</button>
+      <button type="button" data-action="chat#deselectAll" disabled="<%= selected_count == 0 %>" class="rounded border px-2 py-1 disabled:cursor-not-allowed disabled:opacity-40">Deselect all</button>
+
+      <button
+        type="button"
+        data-herb-set="confirming_bulk=true"
+        disabled="<%= selected_count == 0 %>"
+        class="rounded bg-red-600 px-3 py-1 text-white disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <% if selected_count == 1 %>
+          Delete message
+        <% elsif selected_count > 1 %>
+          Delete <%= selected_count %> messages
+        <% else %>
+          Delete
+        <% end %>
+      </button>
+    </div>
+
+    <% if confirming_bulk? %>
+      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+        <div class="w-full max-w-sm rounded-lg bg-white p-5 shadow-xl">
+          <p class="mb-1 text-base font-semibold">Delete <%= selected_count %> selected?</p>
+          <p class="mb-5 text-sm text-gray-500">The messages are removed for everyone.</p>
+
+          <div class="flex justify-end gap-2 text-sm">
+            <button type="button" data-herb-set="confirming_bulk=false" class="rounded border px-3 py-1">Cancel</button>
+            <button type="button" data-action="chat#destroySelected" class="rounded bg-red-600 px-3 py-1 text-white">Delete</button>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <p class="mb-4 text-xs text-gray-500"><%= pending_count %> in flight</p>
+
+  <form action="/chat/messages" method="post" data-herb-into="messages" class="flex items-center gap-2">
+    <div class="relative flex-1">
+      <input
+        name="body"
+        value="<%= draft %>"
+        data-chat-target="input"
+        autocomplete="off"
+        placeholder="Say something"
+        class="w-full rounded border border-gray-300 py-2 pl-3 pr-9"
+      >
+
+      <button
+        type="button"
+        data-herb-reset="draft"
+        aria-label="Clear"
+        hidden="<%= draft == "" %>"
+        class="absolute inset-y-0 right-0 flex w-9 items-center justify-center text-gray-400 hover:text-gray-600"
+      >&times;</button>
+    </div>
+
+    <button disabled="<%= draft == "" %>" class="rounded bg-gray-900 px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-40">Send</button>
+  </form>
+
+  <button type="button" data-action="chat#toggleServer" data-chat-target="server" class="mt-4 text-xs text-gray-400 underline">
+    Kill the server
+  </button>
+</div>

@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/marcoroth/herb.git
-  revision: cb2c2dbaed1c8a98253f483205b866e32f92d61e
-  branch: main
+  revision: b06fc11b30f2cdbbe6a5681ee23cb94bfb671215
+  branch: slots/client-hydration
   specs:
     herb (0.10.3)
     herb (0.10.3-aarch64-linux-gnu)
@@ -14,8 +14,8 @@ GIT
 
 GIT
   remote: https://github.com/marcoroth/reactionview.git
-  revision: 6054b9039d0985d3395f08585121c4a5414fe2c5
-  branch: reactivity
+  revision: e202922a38d2d8d4208c4d9ce18b031421d7409e
+  branch: slots/create
   specs:
     reactionview (0.4.0)
       actionview (>= 7.0)

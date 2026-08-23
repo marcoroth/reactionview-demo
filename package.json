@@ -9,10 +9,11 @@
     "build:css": "npx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify"
   },
   "dependencies": {
+    "@herb-tools/client": "https://pkg.pr.new/@herb-tools/client@2387",
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.23",
+    "@rails/request.js": "^0.0.13",
     "@tailwindcss/cli": "^4.3.3",
-    "tailwindcss": "^4.3.3",
-    "@herb-tools/client": "https://pkg.pr.new/marcoroth/herb/@herb-tools/client@cb2c2db"
+    "tailwindcss": "^4.3.3"
   }
 }
