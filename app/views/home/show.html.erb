@@ -1,0 +1,42 @@
+<div class="mx-auto max-w-4xl px-4 py-10">
+  <header class="mb-10">
+    <h1 class="text-3xl font-bold tracking-tight">ReActionView demos</h1>
+    <p class="mt-2 text-sm text-gray-500">Interactive Rails templates rendered by Herb. Every page here is plain ERB with a few states declared on top.</p>
+  </header>
+
+  <% {
+    "Apps" => [
+      ["/chat", "💬", "Chat", "optimistic messages, live search, filters, editing, bulk selection"],
+      ["/music", "🎵", "Music", "an album library with an expanding detail row and a now playing bar"],
+      ["/dashboard", "📊", "Dashboard", "parallel scoped tiles and a polling clock"],
+    ],
+    "Slots and state" => [
+      ["/status", "📈", "Status", "a live status board, every value re-read from the server in place"],
+      ["/activity", "📡", "Activity", "a filterable team feed where the server renders every branch"],
+      ["/cascade", "🌊", "Cascade", "continent, country and state selects driven by bound values"],
+      ["/deferred", "⏳", "Deferred", "async and lazy blocks that load after the page"],
+    ],
+    "UI patterns" => [
+      ["/tooltips", "💡", "Tooltips", "instant client tooltips and a server hovercard"],
+      ["/overlays", "🪟", "Overlays", "a dialog, a sliding side panel and a full-screen alert"],
+      ["/components", "🧩", "Components", "tabs, accordion, switches, dropdown, toast, command palette, pagination"],
+    ],
+  }.each do |section, demos| %>
+    <section class="mb-10">
+      <h2 class="mb-4 text-lg font-bold"><%= section %></h2>
+
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <% demos.each do |path, icon, name, description| %>
+          <div class="group relative flex flex-col gap-1.5 rounded-xl border border-gray-200 bg-white p-4 transition hover:-translate-y-0.5 hover:border-lime-600 hover:shadow-md">
+            <a href="<%= path %>" class="absolute inset-0 rounded-xl" aria-label="<%= name %>"></a>
+            <span class="text-xl grayscale transition group-hover:grayscale-0"><%= icon %></span>
+            <span class="font-bold text-gray-900"><%= name %></span>
+            <span class="text-sm leading-snug text-gray-500"><%= description %></span>
+            <span class="absolute right-4 top-4 text-gray-300 transition group-hover:text-lime-600">›</span>
+            <a href="https://github.com/marcoroth/reactionview-demo/blob/main/app/views<%= path %>/show.html.erb" target="_blank" rel="noopener" class="relative z-10 mt-1 self-start text-xs text-gray-400 hover:text-lime-600 hover:underline">view source</a>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+</div>

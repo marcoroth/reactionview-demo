@@ -1,0 +1,39 @@
+<%# herb:slots server %>
+<%# herb:state (note: "") %>
+
+<div class="mx-auto max-w-2xl px-4 py-6">
+  <header class="mb-6 flex items-baseline justify-between">
+    <h1 class="text-2xl font-bold">Activity (server slots)</h1>
+
+    <button type="button" data-herb-action="$refresh" class="rounded border px-2 py-1 text-sm">Refresh</button>
+  </header>
+
+  <dl class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm [&_dt]:text-gray-500 [&_dd]:font-mono">
+    <dt>Messages</dt>
+    <dd id="total"><%= Message.count %></dd>
+
+    <dt>Rendered at</dt>
+    <dd id="time"><%= Time.current.strftime("%H:%M:%S.%L") %></dd>
+  </dl>
+
+  <p id="parity" class="mt-4 text-sm text-gray-500">
+    <% if Time.current.sec.even? %>
+      Server rendered an even second: <%= Time.current.sec %>
+    <% else %>
+      Server rendered an odd second: <%= Time.current.sec %>
+    <% end %>
+  </p>
+
+  <div class="mt-6 text-sm">
+    <input value="<%= note %>" placeholder="Type a note" class="rounded border border-gray-300 px-2 py-1" id="note-input">
+    <p class="mt-2">Echo: <span id="echo"><%= note %></span></p>
+
+    <p id="note-state" class="mt-2 text-gray-500">
+      <% if note.empty? %>
+        <span>Nothing noted yet</span>
+      <% else %>
+        <span>Noted!</span>
+      <% end %>
+    </p>
+  </div>
+</div>

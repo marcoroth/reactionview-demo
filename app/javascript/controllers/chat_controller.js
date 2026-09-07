@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { useState } from "@herb-tools/client/stimulus"
-import { stateFor } from "@herb-tools/client"
-import { post, patch, destroy } from "@rails/request.js"
+import { stateFor, slotsRequest } from "@herb-tools/client"
+import { post } from "@rails/request.js"
 
 export default class extends Controller {
   static targets = ["input", "server"]
@@ -11,11 +11,15 @@ export default class extends Controller {
   }
 
   retry(event) {
-    this.mutations.retry(event.target)
+    const row = event.currentTarget.closest("[data-message-id]")
+
+    if (row && stateFor(row).get("body_draft") !== null) return this.save(event)
+
+    this.outbox.retry(event.target)
   }
 
   discard(event) {
-    this.mutations.discard(event.target)
+    this.outbox.discard(event.target)
   }
 
   async save(event) {
@@ -31,24 +35,19 @@ export default class extends Controller {
       ? this.slots.slotInItem(scope.region.file, "messages", scope.item.key, "body", scope.region.occurrence)
       : null
 
-    const previous = slot ? this.slots.currentText(slot) : null
-
     if (slot) this.slots.setText(slot, body)
 
-    const response = await patch(`/chat/messages/${id}`, {
-      body: { body },
-      headers: { Accept: "application/vnd.herb.slots+json" },
-    })
+    let payload
 
-    if (!response.ok) {
-      if (slot && previous !== null) this.slots.setText(slot, previous)
-
+    try {
+      payload = await slotsRequest(`/chat/messages/${id}`, { method: "PATCH", body: { body } })
+    } catch {
       state.set({ pending: false, failed: true })
 
       return
     }
 
-    this.slots.apply(await response.json, { items: "merge" })
+    this.slots.apply(payload, { items: "merge" })
 
     state.set({ pending: false, failed: false })
   }
@@ -76,12 +75,11 @@ export default class extends Controller {
 
     state.toggle("starred")
 
-    const response = await patch(`/chat/messages/${row.dataset.messageId}`, {
-      body: { starred: state.get("starred") },
-      headers: { Accept: "application/vnd.herb.slots+json" },
-    })
-
-    if (!response.ok) state.toggle("starred")
+    try {
+      await slotsRequest(`/chat/messages/${row.dataset.messageId}`, { method: "PATCH", body: { starred: state.get("starred") } })
+    } catch {
+      state.toggle("starred")
+    }
   }
 
   selectAll() {
@@ -117,9 +115,9 @@ export default class extends Controller {
       for (const target of targets) this.slots.removeItem(collection, target.scope.item.key)
     })
 
-    const responses = await Promise.all(targets.map((target) => destroy(`/chat/messages/${target.id}`)))
+    const results = await Promise.allSettled(targets.map((target) => slotsRequest(`/chat/messages/${target.id}`, { method: "DELETE" })))
 
-    if (responses.some((response) => !response.ok) && token !== null) this.slots.revert(token)
+    if (results.some((result) => result.status === "rejected") && token !== null) this.slots.revert(token)
   }
 
   async #remove(row) {
@@ -131,10 +129,10 @@ export default class extends Controller {
 
     const { token } = this.slots.transaction(() => this.slots.removeItem(collection, scope.item.key))
 
-    const response = await destroy(`/chat/messages/${row.dataset.messageId}`)
-
-    if (!response.ok && token !== null) {
-      this.slots.revert(token)
+    try {
+      await slotsRequest(`/chat/messages/${row.dataset.messageId}`, { method: "DELETE" })
+    } catch {
+      if (token !== null) this.slots.revert(token)
     }
   }
 

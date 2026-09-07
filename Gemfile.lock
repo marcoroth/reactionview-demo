@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/marcoroth/herb.git
-  revision: b06fc11b30f2cdbbe6a5681ee23cb94bfb671215
-  branch: slots/client-hydration
+  revision: 168298340a686806be16ea14c3dfdd0f8ec744f2
+  branch: main
   specs:
     herb (0.10.3)
     herb (0.10.3-aarch64-linux-gnu)
@@ -14,12 +14,12 @@ GIT
 
 GIT
   remote: https://github.com/marcoroth/reactionview.git
-  revision: e202922a38d2d8d4208c4d9ce18b031421d7409e
-  branch: slots/create
+  revision: 11ab42bb5757148b09ef33fba4e201a2e67f6adc
+  branch: main
   specs:
     reactionview (0.4.0)
       actionview (>= 7.0)
-      cruise
+      cruise (>= 0.3.0)
       herb (>= 0.10.0, < 0.11.0)
 
 GEM
@@ -126,13 +126,13 @@ GEM
     concurrent-ruby (1.3.8)
     connection_pool (3.0.2)
     crass (1.0.7)
-    cruise (0.2.0)
-    cruise (0.2.0-aarch64-linux-gnu)
-    cruise (0.2.0-aarch64-linux-musl)
-    cruise (0.2.0-arm-linux-gnu)
-    cruise (0.2.0-arm64-darwin)
-    cruise (0.2.0-x86_64-linux-gnu)
-    cruise (0.2.0-x86_64-linux-musl)
+    cruise (0.3.0)
+    cruise (0.3.0-aarch64-linux-gnu)
+    cruise (0.3.0-aarch64-linux-musl)
+    cruise (0.3.0-arm-linux-gnu)
+    cruise (0.3.0-arm64-darwin)
+    cruise (0.3.0-x86_64-linux-gnu)
+    cruise (0.3.0-x86_64-linux-musl)
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
     date (3.5.1)
@@ -187,6 +187,13 @@ GEM
       thor (~> 1.3)
       zeitwerk (>= 2.6.18, < 3.0)
     language_server-protocol (3.17.0.6)
+    lightningcss (0.2.0-aarch64-linux-gnu)
+    lightningcss (0.2.0-aarch64-linux-musl)
+    lightningcss (0.2.0-arm-linux-gnu)
+    lightningcss (0.2.0-arm-linux-musl)
+    lightningcss (0.2.0-arm64-darwin)
+    lightningcss (0.2.0-x86_64-linux-gnu)
+    lightningcss (0.2.0-x86_64-linux-musl)
     lint_roller (1.1.0)
     logger (1.7.0)
     loofah (2.25.2)
@@ -307,6 +314,13 @@ GEM
     reline (0.7.0)
       io-console (~> 0.5)
     rexml (3.4.4)
+    rolldown (0.1.1-aarch64-linux-gnu)
+    rolldown (0.1.1-aarch64-linux-musl)
+    rolldown (0.1.1-arm-linux-gnu)
+    rolldown (0.1.1-arm-linux-musl)
+    rolldown (0.1.1-arm64-darwin)
+    rolldown (0.1.1-x86_64-linux-gnu)
+    rolldown (0.1.1-x86_64-linux-musl)
     rubocop (1.89.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -432,10 +446,12 @@ DEPENDENCIES
   jbuilder
   jsbundling-rails
   kamal
+  lightningcss (~> 0.2.0)
   propshaft
   puma (>= 5.0)
   rails (~> 8.1.3, >= 8.1.3.1)
   reactionview!
+  rolldown (~> 0.1.1)
   rubocop-rails-omakase
   selenium-webdriver
   solid_cable
@@ -476,13 +492,13 @@ CHECKSUMS
   concurrent-ruby (1.3.8) sha256=b2f1be836e968ccc78ccfce277ea79c72a88633f22306782c16ff23fb415d1e1
   connection_pool (3.0.2) sha256=33fff5ba71a12d2aa26cb72b1db8bba2a1a01823559fb01d29eb74c286e62e0a
   crass (1.0.7) sha256=94868719948664c89ddcaf0a37c65048413dfcb1c869470a5f7a7ceb5390b295
-  cruise (0.2.0) sha256=ffdbc6f9fa7b6071dbf2c7435bf887d41a822fe9b6ab422fa8a8456c0f034d71
-  cruise (0.2.0-aarch64-linux-gnu) sha256=87a5a3fbda8070b4a531b84161c7c5acbcc54f62e57b9ffa6960df61e9b9c2c3
-  cruise (0.2.0-aarch64-linux-musl) sha256=9f14c9a00aeeb67d75a29dd3d3bd4ce60bef23d148c35e525461e5990b986d25
-  cruise (0.2.0-arm-linux-gnu) sha256=7faf04aef6b0b5e2308827450d9e4626026bd35b91e0727cef91aa508057e07c
-  cruise (0.2.0-arm64-darwin) sha256=fb3e9b265868e077dd754b4a430ab14d8abb209281c61c906b74f326b797a10a
-  cruise (0.2.0-x86_64-linux-gnu) sha256=3d16f6a6a3409f2cae5dbdb3fb322389fa61a6a18d80a2df50fc4c807f1f0fd9
-  cruise (0.2.0-x86_64-linux-musl) sha256=2be5c5f2fb474ff5a4f42e3421dbb27fb439008a53697f7a6a3d2f3ec2de711c
+  cruise (0.3.0) sha256=db75b7c589d1746965708bb82433591647ee32d77690fe7c42582352e0851e43
+  cruise (0.3.0-aarch64-linux-gnu) sha256=99c96550a7d2e740212978770d3867837371de335cd866e4755abd34b8428838
+  cruise (0.3.0-aarch64-linux-musl) sha256=a23e5c415f491a3480eff71f1a07692d7fc1bac39a316c04fb3726faec620d87
+  cruise (0.3.0-arm-linux-gnu) sha256=c266461d7ab6422afd8f3504d9b67ebc0db2c2116750d2b4eb32c7103bf42d3e
+  cruise (0.3.0-arm64-darwin) sha256=6bb8bbef2ab7b4103849e1809435aa1922d07ec5e2c766a525626c41682ab5ff
+  cruise (0.3.0-x86_64-linux-gnu) sha256=a7bdd7c72307a450a9d37f3c7a90c118230ea6122663b32b8c8e52cad32adfa8
+  cruise (0.3.0-x86_64-linux-musl) sha256=54ed6809f1d476bf99a3043bc256cca0efed8bbc9df93a55f4e49eac2bbcb7f4
   cssbundling-rails (1.4.3) sha256=53aecd5a7d24ac9c8fcd92975acd0e830fead4ee4583d3d3d49bb64651946e41
   date (3.5.1) sha256=750d06384d7b9c15d562c76291407d89e368dda4d4fff957eb94962d325a0dc0
   debug (1.11.1) sha256=2e0b0ac6119f2207a6f8ac7d4a73ca8eb4e440f64da0a3136c30343146e952b6
@@ -518,6 +534,13 @@ CHECKSUMS
   json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
   kamal (2.12.0) sha256=c51d1ab085e515470f98d0c0f043637122b5ebf76e8b610cb1fbbed0b7f9b8fa
   language_server-protocol (3.17.0.6) sha256=5ef2c0c138f8267e1bc631d3328347d354f96724b0af22f2c79516120443b7f0
+  lightningcss (0.2.0-aarch64-linux-gnu) sha256=d60dd20888d32991f0596c92153c6ccbcba8d6818475b3dd7383e27514b38c55
+  lightningcss (0.2.0-aarch64-linux-musl) sha256=a521693773be6359b86dbf12191529c7d1516f4cb38dc7a6c5a7e63ae6495b2a
+  lightningcss (0.2.0-arm-linux-gnu) sha256=ffe8d7e76a08bfa07b5a072f9d223ac768426ce407c56d3b9db1da7d514993a0
+  lightningcss (0.2.0-arm-linux-musl) sha256=0b1ab795e16411308320c5488ef64cd3628e58e07f3e7ebcb43d12b435ca5d12
+  lightningcss (0.2.0-arm64-darwin) sha256=8a3434b6c30c05dd82437a6a747cb16969cf387767e11afabfb36fdf72689e7f
+  lightningcss (0.2.0-x86_64-linux-gnu) sha256=e24fc39a3e48a7a1dee72471085d43255da3d8677f495c0f7a50ce70407d0735
+  lightningcss (0.2.0-x86_64-linux-musl) sha256=f834241c1bec3b6cb80d0d1bcb9b045950e72bb781b97601cad9226a18cc2826
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   loofah (2.25.2) sha256=2007f746959ac65552456e04b433e83deb22759ab38c838b4445c70e43425918
@@ -570,6 +593,13 @@ CHECKSUMS
   regexp_parser (2.12.0) sha256=35a916a1d63190ab5c9009457136ae5f3c0c7512d60291d0d1378ba18ce08ebb
   reline (0.7.0) sha256=5b012d8e55dbf9d450f12bde2cf7d15ff546ae80b3f8f3b30e570d431815583d
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
+  rolldown (0.1.1-aarch64-linux-gnu) sha256=0bd1a39ddc9daa3d288eb0ad7ab4ddaea44437f4989762560317350737edda4b
+  rolldown (0.1.1-aarch64-linux-musl) sha256=0418d429d70cd09dbe19153459fcc1eb100b3a5949a2f6e08fcf8694076c02c9
+  rolldown (0.1.1-arm-linux-gnu) sha256=3f71435a461c87f64a70158f7879b94f2ead27339ed384076c7546e04ddc826c
+  rolldown (0.1.1-arm-linux-musl) sha256=af788058662fd14aa9b0085af9bf48726872d29dc469e595c67fe20cec880908
+  rolldown (0.1.1-arm64-darwin) sha256=cc633b59d9589227fa1cd4878bd6c923f67274476ebd461db300e8e784bf1f11
+  rolldown (0.1.1-x86_64-linux-gnu) sha256=c52ce9440a6bf18ad4c240696242e7433464a078ea3868cb3f3360cf8c739fbc
+  rolldown (0.1.1-x86_64-linux-musl) sha256=71ff22ab0e57cc0071163216ca0b02dc266613e29366b15e038aa747a72d44cf
   rubocop (1.89.0) sha256=4dee8e3ee9c45e474834efd9e8d6fd031e8331c8dacdff0de4ad65ae0a6faae7
   rubocop-ast (1.50.0) sha256=b9ca88300da0803ee222ad20cdb30494c0a784eed06fdc35d254b06d662788db
   rubocop-performance (1.27.0) sha256=eeeb1374d062a368ee1c787b70eb0b0cc4b184cb1f8565f424760946146d61ce

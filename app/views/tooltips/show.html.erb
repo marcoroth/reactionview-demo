@@ -1,0 +1,57 @@
+<%# herb:slots client %>
+<%# herb:state (tip: "", peek: "") %>
+
+<div class="mx-auto max-w-4xl px-4 py-6">
+  <header class="mb-6 flex items-baseline justify-between">
+    <h1 class="text-2xl font-bold">Tooltips</h1>
+  </header>
+
+  <section class="mb-8">
+    <h2 class="mb-2 text-sm text-gray-500">Client tooltips, no round trip</h2>
+
+    <div class="flex gap-2">
+      <button type="button" data-herb-set="mouseenter->tip=bold mouseleave->tip=''" class="rounded border px-3 py-1 font-bold">B</button>
+      <button type="button" data-herb-set="mouseenter->tip=italic mouseleave->tip=''" class="rounded border px-3 py-1 italic">I</button>
+      <button type="button" data-herb-set="mouseenter->tip=link mouseleave->tip=''" class="rounded border px-3 py-1 underline">L</button>
+    </div>
+
+    <p id="tip" class="mt-2 h-6 text-sm text-gray-500">
+      <% case tip %>
+      <% when "bold" %>
+        Make it heavy
+      <% when "italic" %>
+        Lean it over
+      <% when "link" %>
+        Point it somewhere
+      <% end %>
+    </p>
+  </section>
+
+  <section>
+    <h2 class="mb-2 text-sm text-gray-500">Server hovercard, one steered round trip</h2>
+
+    <div class="flex flex-wrap gap-2 text-sm">
+      <% Geo.all_cities.sort.each do |city| %>
+        <span id="<%= city %>" data-herb-set="mouseenter->peek='<%= city %>' mouseleave->peek=''" class="cursor-pointer rounded-full border border-gray-300 px-3 py-1 hover:bg-gray-100 hover:[anchor-name:--peeked-pill]">
+          <%= city %>
+        </span>
+      <% end %>
+    </div>
+
+    <% if peek.present? %>
+      <div id="card" class="fixed z-10 w-72 -translate-x-1/2 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg [position-anchor:--peeked-pill] [position-visibility:anchors-valid] [left:anchor(center,-100vw)] [bottom:calc(anchor(top,-100vh)+0.5rem)]">
+        <img src="https://picsum.photos/seed/<%= peek %>/288/96" class="h-24 w-full object-cover" alt="Picture of <%= peek %>" loading="lazy">
+
+        <p class="p-3 text-sm">
+          <Fragment delay="0">
+            <%= Geo.locate(peek) %>
+
+            <Fallback>
+              <div class="w-48 animate-pulse rounded bg-gray-200">&nbsp;</div>
+            </Fallback>
+          </Fragment>
+        </p>
+      </div>
+    <% end %>
+  </section>
+</div>

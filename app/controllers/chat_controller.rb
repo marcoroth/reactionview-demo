@@ -8,7 +8,7 @@ class ChatController < ApplicationController
   def create
     message = Message.create(message_params.merge(author: "You", sent_at: Time.current))
 
-    @messages = [ message ]
+    @messages = Message.where(id: message.id)
 
     respond_to do |format|
       format.slots { render :show, status: :created }
@@ -27,7 +27,7 @@ class ChatController < ApplicationController
       message.update(message_params.slice(:body).merge(edited_at: Time.current))
     end
 
-    @messages = [ message ]
+    @messages = Message.where(id: message.id)
 
     respond_to do |format|
       format.slots { render :show }

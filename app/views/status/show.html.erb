@@ -1,0 +1,59 @@
+<%# herb:slots client %>
+
+<div class="mx-auto max-w-4xl px-4 py-6">
+  <header class="mb-6 flex items-center justify-between gap-3">
+    <h1 class="text-2xl font-bold">Status</h1>
+
+    <div class="flex items-center gap-2 text-sm">
+      <select data-herb-action="change->$refresh" class="rounded border border-gray-300 bg-white px-2 py-1">
+        <option>Last hour</option>
+        <option>Last 24 hours</option>
+        <option>Last 7 days</option>
+      </select>
+
+      <button type="button" data-herb-action="$refresh" class="rounded border border-gray-300 bg-white px-3 py-1 hover:border-lime-500">Refresh</button>
+    </div>
+  </header>
+
+  <% if @healthy %>
+    <div class="mb-6 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+      <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+      All systems operational
+    </div>
+  <% else %>
+    <div class="mb-6 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+      <span class="h-2 w-2 animate-pulse rounded-full bg-amber-500"></span>
+      Elevated latency in one region, watching it closely
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+    <% @stats.each do |stat| %>
+      <section herb-key="<%= stat[:name] %>" class="rounded-lg border border-gray-200 p-4">
+        <h2 class="text-xs uppercase tracking-wide text-gray-500"><%= stat[:name] %></h2>
+        <p class="mt-1 text-2xl font-bold tabular-nums"><%= stat[:value] %></p>
+        <p class="mt-0.5 text-xs <%= stat[:good] ? "text-emerald-600" : "text-amber-600" %>"><%= stat[:delta] %> vs yesterday</p>
+      </section>
+    <% end %>
+  </div>
+
+  <section class="mt-6 rounded-lg border border-gray-200 p-4">
+    <h2 class="mb-3 text-xs uppercase tracking-wide text-gray-500">Latency by region</h2>
+
+    <div class="space-y-2">
+      <% @regions.each do |region| %>
+        <div herb-key="<%= region[:name] %>" class="flex items-center gap-2 text-sm">
+          <span class="w-24 shrink-0 text-gray-600"><%= region[:name] %></span>
+          <div class="h-4 flex-1 rounded bg-gray-100">
+            <div class="h-4 rounded bg-lime-400 transition-[width] duration-300" style="width: <%= region[:percent] %>%"></div>
+          </div>
+          <span class="w-16 text-right tabular-nums text-gray-500"><%= region[:latency] %> ms</span>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <p class="mt-4 text-xs text-gray-400">
+    Snapshot taken at <%= Time.current.strftime("%H:%M:%S.%L") %> and swapped into the page in place, no reload.
+  </p>
+</div>

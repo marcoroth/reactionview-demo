@@ -1,4 +1,6 @@
 class Message < ApplicationRecord
+  scope :search, ->(q) { where("body LIKE ?", "%#{q}%") }
+
   def sent_label
     return "" unless sent_at
 
@@ -8,7 +10,7 @@ class Message < ApplicationRecord
     case time.to_date
     when Date.current
       "Today at #{clock}"
-    when Date.current - 1
+    when Date.yesterday
       "Yesterday at #{clock}"
     else
       "#{time.strftime("%b %-d, %Y")} at #{clock}"

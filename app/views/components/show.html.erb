@@ -1,0 +1,229 @@
+<%# herb:slots client %>
+<%# herb:state (tab: "profile", dark: false, plan: "free", news: false, digest: false, mentions: false, menu: false, nested: false, sub: "", subsub: "", toast: "", palette: false, query: "", page: 1, pages: (Message.count / 5.0).ceil, slide: 1) %>
+
+<div class="mx-auto max-w-4xl px-4 py-6">
+  <header class="mb-6 flex items-baseline justify-between">
+    <h1 class="text-2xl font-bold">Components</h1>
+
+    <button type="button" data-herb-set="palette=true keydown.meta+k@window->palette=true" class="rounded border px-2 py-1 text-sm">Search ⌘K</button>
+  </header>
+
+  <section class="mb-8">
+    <h2 class="mb-2 text-sm text-gray-500">Tabs</h2>
+
+    <div class="flex gap-1 border-b border-gray-200 text-sm">
+      <button type="button" data-herb-set="tab=profile" aria-selected="<%= tab == 'profile' %>" class="border-b-2 border-transparent px-3 py-2 text-gray-500 aria-selected:border-gray-900 aria-selected:text-gray-900">Profile</button>
+      <button type="button" data-herb-set="tab=billing" aria-selected="<%= tab == 'billing' %>" class="border-b-2 border-transparent px-3 py-2 text-gray-500 aria-selected:border-gray-900 aria-selected:text-gray-900">Billing</button>
+      <button type="button" data-herb-set="tab=team" aria-selected="<%= tab == 'team' %>" class="border-b-2 border-transparent px-3 py-2 text-gray-500 aria-selected:border-gray-900 aria-selected:text-gray-900">Team</button>
+    </div>
+
+    <div class="p-3 text-sm text-gray-600">
+      <% case tab %>
+      <% when "profile" %>
+        Your name, your avatar, your story.
+      <% when "billing" %>
+        <%= Message.count %> messages on the current invoice.
+      <% when "team" %>
+        Invite people and assign roles.
+      <% end %>
+    </div>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-2 text-sm text-gray-500">Accordion</h2>
+
+    <div class="divide-y divide-gray-200 rounded border border-gray-200 text-sm">
+      <% [["What is Herb?", "An HTML-aware ERB toolchain."], ["What are slots?", "Addressable holes the server can fill."], ["Is this reactive?", "The parts that matter, yes."]].each do |question, answer| %>
+        <%# herb:key question %>
+        <%# herb:state (open: false) %>
+
+        <div>
+          <button type="button" data-herb-toggle="open" class="flex w-full items-center justify-between px-3 py-2 text-left">
+            <span><%= question %></span>
+            <span><% if open %>−<% else %>+<% end %></span>
+          </button>
+
+          <p hidden="<%= !open %>" class="px-3 pb-3 text-gray-500"><%= answer %></p>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="mb-8 flex flex-wrap gap-10">
+    <div>
+      <h2 class="mb-2 text-sm text-gray-500">Switch</h2>
+
+      <button type="button" data-herb-toggle="dark" data-checked="<%= dark %>" class="group flex h-6 w-11 items-center rounded-full bg-gray-300 p-0.5 transition-colors data-[checked=true]:bg-gray-900">
+        <span class="h-5 w-5 rounded-full bg-white shadow transition-[margin] duration-200 group-data-[checked=true]:ml-5"></span>
+      </button>
+
+      <p class="mt-2 w-20 text-xs text-gray-500">
+        <% if dark %>
+          Dark side
+        <% else %>
+          Light side
+        <% end %>
+      </p>
+    </div>
+
+    <div>
+      <h2 class="mb-2 text-sm text-gray-500">Radio group</h2>
+
+      <div class="flex flex-col gap-1 text-sm [&_[aria-checked=true]]:font-bold">
+        <button type="button" data-herb-set="plan=free" aria-checked="<%= plan == 'free' %>" class="text-left"><% if plan == 'free' %>●<% else %>○<% end %> Free</button>
+        <button type="button" data-herb-set="plan=pro" aria-checked="<%= plan == 'pro' %>" class="text-left"><% if plan == 'pro' %>●<% else %>○<% end %> Pro</button>
+        <button type="button" data-herb-set="plan=team" aria-checked="<%= plan == 'team' %>" class="text-left"><% if plan == 'team' %>●<% else %>○<% end %> Team</button>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="mb-2 text-sm text-gray-500">Checkboxes</h2>
+
+      <div class="flex flex-col gap-1 text-sm">
+        <label class="flex items-center gap-2"><input type="checkbox" checked="<%= news %>" data-herb-toggle="news"> Newsletter</label>
+        <label class="flex items-center gap-2"><input type="checkbox" checked="<%= digest %>" data-herb-toggle="digest"> Digest</label>
+        <label class="flex items-center gap-2"><input type="checkbox" checked="<%= mentions %>" data-herb-toggle="mentions"> Mentions</label>
+      </div>
+
+      <p class="mt-2 text-xs text-gray-500">
+        <% if news || digest || mentions %>
+          Expect email.
+        <% else %>
+          Blissful silence.
+        <% end %>
+      </p>
+    </div>
+  </section>
+
+  <section class="mb-8 flex flex-wrap items-start gap-10">
+    <div>
+      <h2 class="mb-2 text-sm text-gray-500">Dropdown</h2>
+
+      <div class="relative inline-block">
+        <button type="button" data-herb-toggle="menu" class="rounded border px-3 py-1 text-sm">Options ▾</button>
+
+        <% if menu %>
+          <div class="fixed inset-0 z-10" data-herb-set="menu=false"></div>
+
+          <div class="absolute left-0 z-20 mt-1 w-44 rounded border border-gray-200 bg-white py-1 text-sm shadow-lg" data-herb-set="keydown.escape@window->menu=false">
+            <button type="button" data-herb-set="menu=false toast='Renamed it for you'" class="block w-full px-3 py-1 text-left hover:bg-gray-50">Rename</button>
+            <button type="button" data-herb-set="menu=false toast='Copied to clipboard'" class="block w-full px-3 py-1 text-left hover:bg-gray-50">Copy</button>
+            <button type="button" data-herb-set="menu=false toast='Gone, but never forgotten'" class="block w-full px-3 py-1 text-left text-red-600 hover:bg-gray-50">Delete</button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="mb-2 text-sm text-gray-500">Nested dropdown</h2>
+
+      <div class="relative inline-block">
+        <button type="button" data-herb-toggle="nested" data-herb-set="sub='' subsub=''" class="rounded border px-3 py-1 text-sm">Actions ▾</button>
+
+        <% if nested %>
+          <div class="fixed inset-0 z-10" data-herb-set="nested=false sub='' subsub=''"></div>
+
+          <div data-herb-transition="nested-menu" class="absolute left-0 z-20 mt-1 w-44 rounded border border-gray-200 bg-white py-1 text-sm shadow-lg" data-herb-set="keydown.escape@window->nested=false keydown.escape@window->sub='' keydown.escape@window->subsub=''">
+            <button type="button" data-herb-set="nested=false toast='Opened it right up'" class="block w-full px-3 py-1 text-left hover:bg-gray-50">Open</button>
+
+            <div class="relative" data-herb-set="mouseenter->sub='share' mouseleave->sub='' mouseleave->subsub=''">
+              <button type="button" class="flex w-full items-center justify-between px-3 py-1 text-left hover:bg-gray-50">Share <span class="text-gray-400">&#9656;</span></button>
+
+              <% if sub == "share" %>
+                <div data-herb-transition="nested-sub" class="absolute left-full top-0 z-30 -ml-px w-44 rounded border border-gray-200 bg-white py-1 shadow-lg">
+                  <button type="button" data-herb-set="nested=false sub='' toast='Link copied'" class="block w-full px-3 py-1 text-left hover:bg-gray-50">Copy link</button>
+                  <button type="button" data-herb-set="nested=false sub='' toast='Invitation sent'" class="block w-full px-3 py-1 text-left hover:bg-gray-50">Invite people</button>
+
+                  <div class="relative" data-herb-set="mouseenter->subsub='export' mouseleave->subsub=''">
+                    <button type="button" class="flex w-full items-center justify-between px-3 py-1 text-left hover:bg-gray-50">Export as <span class="text-gray-400">&#9656;</span></button>
+
+                    <% if subsub == "export" %>
+                      <div data-herb-transition="nested-subsub" class="absolute left-full top-0 z-40 -ml-px w-36 rounded border border-gray-200 bg-white py-1 shadow-lg">
+                        <button type="button" data-herb-set="nested=false sub='' subsub='' toast='Exported as PDF'" class="block w-full px-3 py-1 text-left hover:bg-gray-50">PDF</button>
+                        <button type="button" data-herb-set="nested=false sub='' subsub='' toast='Exported as CSV'" class="block w-full px-3 py-1 text-left hover:bg-gray-50">CSV</button>
+                        <button type="button" data-herb-set="nested=false sub='' subsub='' toast='Exported as Markdown'" class="block w-full px-3 py-1 text-left hover:bg-gray-50">Markdown</button>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+
+            <button type="button" data-herb-set="nested=false toast='Archived quietly'" class="block w-full px-3 py-1 text-left hover:bg-gray-50">Archive</button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="mb-2 text-sm text-gray-500">Toast</h2>
+
+      <button type="button" data-herb-set="toast='Settings saved'" class="rounded border px-3 py-1 text-sm">Save settings</button>
+    </div>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-2 text-sm text-gray-500">Carousel</h2>
+
+    <div class="overflow-hidden rounded border border-gray-200">
+      <div data-slide="<%= slide %>" class="flex w-[300%] transition-transform duration-300 data-[slide=2]:-translate-x-1/3 data-[slide=3]:-translate-x-2/3">
+        <div class="flex h-32 w-1/3 items-center justify-center bg-amber-100 text-lg text-amber-800">One</div>
+        <div class="flex h-32 w-1/3 items-center justify-center bg-emerald-100 text-lg text-emerald-800">Two</div>
+        <div class="flex h-32 w-1/3 items-center justify-center bg-sky-100 text-lg text-sky-800">Three</div>
+      </div>
+    </div>
+
+    <div class="mt-2 flex items-center justify-center gap-3 text-sm">
+      <button type="button" data-herb-decrement="slide" disabled="<%= slide <= 1 %>" class="rounded border px-2 disabled:opacity-40">&lsaquo;</button>
+
+      <button type="button" data-herb-set="slide=1" data-active="<%= slide == 1 %>" aria-label="Slide one" class="h-2.5 w-2.5 rounded-full bg-gray-300 data-[active=true]:bg-gray-900"></button>
+      <button type="button" data-herb-set="slide=2" data-active="<%= slide == 2 %>" aria-label="Slide two" class="h-2.5 w-2.5 rounded-full bg-gray-300 data-[active=true]:bg-gray-900"></button>
+      <button type="button" data-herb-set="slide=3" data-active="<%= slide == 3 %>" aria-label="Slide three" class="h-2.5 w-2.5 rounded-full bg-gray-300 data-[active=true]:bg-gray-900"></button>
+
+      <button type="button" data-herb-increment="slide" disabled="<%= slide >= 3 %>" class="rounded border px-2 disabled:opacity-40">&rsaquo;</button>
+    </div>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="mb-2 text-sm text-gray-500">Pagination, server-fed</h2>
+
+    <ul class="mb-2 divide-y divide-gray-100 rounded border border-gray-200 text-sm">
+      <% Message.order(:id).offset(([page, 1].max - 1) * 5).limit(5).each do |message| %>
+        <%# herb:key message.id %>
+        <li class="px-3 py-1.5"><%= message.body %></li>
+      <% end %>
+    </ul>
+
+    <div class="flex items-center gap-3 text-sm">
+      <button type="button" data-herb-decrement="page" data-herb-throttle="400" disabled="<%= page <= 1 %>" class="rounded border px-2 py-1 disabled:opacity-40">Prev</button>
+      <span class="text-gray-500">Page <%= page %> of <%= pages %></span>
+      <button type="button" data-herb-increment="page" data-herb-throttle="400" disabled="<%= page >= pages %>" class="rounded border px-2 py-1 disabled:opacity-40">Next</button>
+    </div>
+  </section>
+
+  <% if palette %>
+    <div class="fixed inset-0 z-40" data-herb-set="keydown.escape@window->palette=false query=''">
+      <div class="absolute inset-0 bg-gray-900/40" data-herb-set="palette=false query=''"></div>
+
+      <div class="absolute left-1/2 top-24 w-96 -translate-x-1/2 rounded-lg bg-white shadow-xl">
+        <input value="<%= query %>" placeholder="Search cities" autocomplete="off" autofocus class="w-full px-4 py-3 text-sm outline-none">
+
+        <% if query.present? %>
+          <ul class="max-h-64 overflow-y-auto text-sm border-t border-gray-200">
+            <% Geo.all_cities.select { |city| query.present? && city.downcase.include?(query.downcase) }.each do |city| %>
+              <%# herb:key city %>
+              <li class="px-4 py-1.5 hover:bg-gray-50"><%= city %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if toast.present? %>
+    <div class="fixed bottom-4 right-4 z-50 flex items-center gap-3 rounded-lg bg-gray-900 px-4 py-2 text-sm text-white shadow-lg">
+      <span><%= toast %></span>
+      <button type="button" data-herb-reset="toast" class="text-gray-400">✕</button>
+    </div>
+  <% end %>
+</div>

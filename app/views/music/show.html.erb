@@ -1,0 +1,593 @@
+<%# herb:slots client %>
+<%# herb:state (number: 0, album: "", album_index: 0, album_title: "", album_artist: "", track: "", playing: false) %>
+
+<style scoped>
+  .player {
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 7rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .album-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(11rem, 100%), 1fr));
+    grid-auto-flow: row dense;
+    gap: 1rem;
+  }
+
+  .album-card {
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .album-card img {
+    aspect-ratio: 1;
+    width: 100%;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+    filter: saturate(0.6) contrast(1.1);
+    transition: transform 150ms ease, filter 150ms ease;
+  }
+
+  .album-card:active img {
+    transform: scale(0.97);
+    transition-duration: 60ms;
+  }
+
+  .album-card:hover img {
+    transform: scale(1.02);
+    filter: saturate(1) contrast(1.05);
+    outline: 2px solid #84cc16;
+    outline-offset: 2px;
+  }
+
+  .album-title {
+    margin-top: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .album-artist {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+
+  @keyframes detail-in {
+    from {
+      transform: translateY(-0.5rem) scale(0.995);
+    }
+  }
+
+  .detail:focus {
+    outline: none;
+  }
+
+  .detail {
+    animation: detail-in 160ms ease-out;
+    position: relative;
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background: #fafafa;
+  }
+
+  .detail .cover {
+    height: 10rem;
+    width: 10rem;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
+    filter: saturate(0.6) contrast(1.1);
+  }
+
+  .detail-body {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .detail-body h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 5.5rem;
+  }
+
+  .detail-meta {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .detail-actions {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .detail-actions .close {
+    border: 1px solid #d1d5db;
+    border-radius: 9999px;
+    padding: 0.375rem 1.25rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    background: #fff;
+  }
+
+  .detail-actions .close:hover {
+    background: #f9fafb;
+  }
+
+  .tracks {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .tracks li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.375rem 0;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .track-number {
+    flex: none;
+    width: 1.5rem;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #9ca3af;
+    cursor: pointer;
+  }
+
+  .track-number .play {
+    display: none;
+    color: #65a30d;
+  }
+
+  .track-wave {
+    display: none;
+    align-items: flex-end;
+    gap: 1px;
+  }
+
+  .track-wave.is-on {
+    display: inline-flex;
+  }
+
+  .number.is-off {
+    display: none;
+  }
+
+  .track-wave span {
+    width: 2px;
+    background: #65a30d;
+    animation: equalize 700ms ease-in-out infinite alternate;
+  }
+
+  .track-wave span:nth-child(1) { height: 6px; }
+  .track-wave span:nth-child(2) { height: 10px; animation-delay: 150ms; }
+  .track-wave span:nth-child(3) { height: 8px; animation-delay: 300ms; }
+
+  .track-number .stop {
+    display: none;
+    color: #dc2626;
+  }
+
+  .tracks li:hover .track-number .number,
+  .tracks li:hover .track-number .track-wave {
+    display: none;
+  }
+
+  .tracks li:hover .track-number .play {
+    display: inline;
+  }
+
+  .tracks li:hover .track-number:has(.track-wave.is-on) .play {
+    display: none;
+  }
+
+  .tracks li:hover .track-number:has(.track-wave.is-on) .stop {
+    display: inline;
+  }
+
+  .track-title {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .track-title:hover {
+    color: #65a30d;
+  }
+
+  .track-duration {
+    font-size: 0.75rem;
+    color: #9ca3af;
+  }
+
+  .now-playing {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 30;
+    border-top: 1px solid #e5e7eb;
+    background: rgb(255 255 255 / 0.95);
+    backdrop-filter: blur(8px);
+  }
+
+  .now-playing-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: 0.5rem 1rem;
+  }
+
+  .now-playing img {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 0.25rem;
+    object-fit: cover;
+    filter: saturate(0.6) contrast(1.1);
+  }
+
+  .now-playing-info {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .now-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .now-artist {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+
+  .playhead {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #e5e7eb;
+  }
+
+  .playhead-fill {
+    height: 100%;
+    width: 0;
+    background: #65a30d;
+    animation: playhead linear forwards;
+  }
+
+  .playhead[data-playing="false"] .playhead-fill {
+    animation-play-state: paused;
+  }
+
+  @keyframes playhead {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+  .skeleton-meta {
+    width: 3rem;
+    vertical-align: baseline;
+  }
+
+  .skeleton {
+    display: inline-block;
+    border-radius: 0.25rem;
+    background: #e5e7eb;
+    animation: shimmer 1s ease-in-out infinite alternate;
+  }
+
+  .skeleton-track { flex: 1; max-width: 9rem; }
+  .skeleton-duration { width: 2rem; margin-left: auto; }
+
+  @keyframes shimmer {
+    from { opacity: 1; }
+    to { opacity: 0.45; }
+  }
+
+  .equalizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  .equalizer span {
+    width: 3px;
+    background: #65a30d;
+    animation: equalize 700ms ease-in-out infinite alternate;
+  }
+
+  .equalizer span:nth-child(1) { height: 8px; animation-delay: 0ms; }
+  .equalizer span:nth-child(2) { height: 14px; animation-delay: 150ms; }
+  .equalizer span:nth-child(3) { height: 10px; animation-delay: 300ms; }
+
+  @keyframes equalize {
+    from { transform: scaleY(0.4); }
+    to { transform: scaleY(1); }
+  }
+
+  .play-pause {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    border: 1px solid #d1d5db;
+    border-radius: 9999px;
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+
+  .play-pause:hover {
+    background: #f9fafb;
+  }
+
+  .dismiss {
+    color: #9ca3af;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+
+  .dismiss:hover {
+    color: #4b5563;
+  }
+
+  .sheet-handle {
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    .player {
+      padding: 1rem 1rem 8rem;
+    }
+
+    header {
+      margin-bottom: 1rem;
+    }
+
+    .album-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.875rem;
+    }
+
+    .detail {
+      position: fixed;
+      inset-inline: 0;
+      width: auto;
+      top: 4rem;
+      bottom: 0;
+      z-index: 40;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin: 0;
+      padding: 0.75rem 1rem 2.5rem;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: #fff;
+      border: 0;
+      border-radius: 1.25rem 1.25rem 0 0;
+      box-shadow: 0 -12px 40px rgb(0 0 0 / 0.25);
+      animation: sheet-in 250ms ease;
+    }
+
+    .sheet-handle {
+      display: flex;
+      flex: none;
+      width: 100%;
+      justify-content: center;
+      padding: 0.375rem 0 0.625rem;
+      cursor: pointer;
+    }
+
+    .sheet-handle span {
+      width: 2.5rem;
+      height: 0.25rem;
+      border-radius: 9999px;
+      background: #e5e7eb;
+    }
+
+    .sheet-handle:active span {
+      background: #9ca3af;
+    }
+
+    @keyframes sheet-in {
+      from { transform: translateY(100%); }
+    }
+
+    [data-herb-transition] {
+      view-transition-name: none !important;
+    }
+
+    .detail .cover {
+      width: min(14rem, 70%);
+      height: auto;
+      aspect-ratio: 1;
+    }
+
+    .detail-body {
+      width: 100%;
+    }
+
+    .detail-body h2,
+    .detail-meta {
+      text-align: center;
+    }
+
+    .detail-body h2 {
+      padding-right: 0;
+    }
+
+    .detail-actions {
+      top: 0.625rem;
+      right: 0.75rem;
+    }
+
+    .tracks li {
+      padding: 0.625rem 0;
+    }
+
+    .now-playing-inner {
+      padding: 0.5rem 0.75rem;
+    }
+
+    .player:has(.detail) .now-playing {
+      display: none;
+    }
+
+    .now-playing .dismiss {
+      display: none;
+    }
+  }
+</style>
+
+<div class="player">
+  <header>
+    <h1>Library</h1>
+  </header>
+
+  <div class="album-grid">
+    <% Music.albums.each_with_index do |a, i| %>
+      <button herb-key="<%= a[:id] %>" type="button" class="album-card" style="order: <%= i %>" data-herb-set="album_title='<%= a[:title] %>' album_artist='<%= a[:artist] %>' album='<%= a[:id] %>' album_index=<%= i %>">
+        <img src="https://picsum.photos/seed/<%= a[:id] %>/300/300" alt="">
+        <p class="album-title"><%= a[:title] %></p>
+        <p class="album-artist"><%= a[:artist] %></p>
+      </button>
+    <% end %>
+
+    <% if album.present? %>
+      <section class="detail" tabindex="-1" autofocus style="order: <%= album_index %>">
+        <button type="button" class="sheet-handle" data-herb-set="album=''" aria-label="Close"><span></span></button>
+
+        <img class="cover" src="https://picsum.photos/seed/<%= album %>/300/300" alt="">
+
+        <div class="detail-body">
+          <h2><%= album_title %></h2>
+
+          <Fragment delay="0" hold="350" on="album">
+            <div class="detail-copy">
+            <p class="detail-meta">
+              <%= album_artist %> &middot; <%= Music.year(album) %> &middot; <%= Music.track_count(album) %> tracks
+            </p>
+
+            <div class="detail-actions">
+              <button type="button" class="close" data-herb-set="click->album='' keydown.escape@window->album=''">Close</button>
+            </div>
+
+            <ul class="tracks">
+              <% Music.tracks(album).each do |entry| %>
+                <li herb-key="<%= entry[:number] %>">
+                  <button type="button" class="track-number" data-herb-set="<%= Music.row_action(entry, track, number) %>" aria-label="Play">
+                    <span class="number <%= "is-off" if track == entry[:album] && number == entry[:number] %>"><%= entry[:number] %></span>
+                    <span class="track-wave <%= "is-on" if track == entry[:album] && number == entry[:number] %>"><span></span><span></span><span></span></span>
+                    <span class="play">&#9654;</span>
+                    <span class="stop">&#9632;</span>
+                  </button>
+
+                  <button type="button" class="track-title" data-herb-set="track='<%= entry[:album] %>' number=<%= entry[:number] %> playing=true"><%= entry[:title] %></button>
+                  <span class="track-duration"><%= entry[:duration] %></span>
+                </li>
+              <% end %>
+            </ul>
+            </div>
+
+            <Fallback>
+              <div class="detail-copy">
+              <p class="detail-meta"><%= album_artist %> &middot; <span class="skeleton skeleton-meta">&nbsp;</span> &middot; <span class="skeleton skeleton-meta">&nbsp;</span></p>
+
+              <div class="detail-actions">
+                <button type="button" class="close" data-herb-set="album=''">Close</button>
+              </div>
+
+              <ul class="tracks">
+                <% 5.times do |n| %>
+                  <li>
+                    <span class="track-number"><%= n + 1 %></span>
+                    <span class="skeleton skeleton-track">&nbsp;</span>
+                    <span class="skeleton skeleton-duration">&nbsp;</span>
+                  </li>
+                <% end %>
+              </ul>
+              </div>
+            </Fallback>
+          </Fragment>
+        </div>
+      </section>
+    <% end %>
+  </div>
+
+  <% if track.present? %>
+    <div class="now-playing">
+      <div class="playhead" herb-key="<%= track %>:<%= number %>" data-playing="<%= playing %>">
+        <div class="playhead-fill" style="animation-duration: <%= Music.seconds(track, number) %>s"></div>
+      </div>
+
+      <div class="now-playing-inner">
+        <% if track.present? && track != "" %>
+          <img data-herb-transition="now-playing-art" src="https://picsum.photos/seed/<%= track %>/300/300" alt="">
+        <% end %>
+
+        <div class="now-playing-info">
+          <p class="now-title"><%= Music.track_name(track, number) %></p>
+          <p class="now-artist"><%= Music.artist(track) %> &middot; <%= Music.title(track) %></p>
+        </div>
+
+        <span class="equalizer" hidden="<%= !playing %>">
+          <span></span><span></span><span></span>
+        </span>
+
+        <button type="button" class="play-pause" data-herb-toggle="playing">
+          <span hidden="<%= playing %>">&#9654;</span>
+          <span hidden="<%= !playing %>">&#10074;&#10074;</span>
+        </button>
+
+        <button type="button" class="dismiss" data-herb-set="track='' playing=false">&#10005;</button>
+      </div>
+    </div>
+  <% end %>
+</div>

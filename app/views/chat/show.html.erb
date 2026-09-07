@@ -1,52 +1,46 @@
 <%# herb:slots client %>
-<%# herb:state (draft: "", filter: "all", unread: 0, alerting: unread > 3, showing_all: filter == "all", showing_starred: filter == "starred", pending_count: 0, starred_count: 0, total_count: 0, selecting: false, selected_count: 0, confirming_bulk: false) %>
+<%# herb:state (draft: "", q: "", filter: "all", showing_all: filter == "all", showing_starred: filter == "starred", pending_count: 0, starred_count: 0, total_count: 0, selecting: false, selected_count: 0, confirming_bulk: false) %>
 
 <div
-  class="mx-auto flex h-dvh max-w-2xl flex-col px-4 py-6 [&_.msg[data-pending=true]]:opacity-55 [&_.msg[data-failed=true]]:bg-red-50 [&_.msg[data-failed=true]]:border-red-300 [&_.msg[data-starred=true]]:border-l-amber-500 [&_.msg[data-editing=true]_.view]:hidden [&_.msg[data-starred=true]_.star-on]:inline [&_.msg[data-starred=true]_.star-off]:hidden [&_[aria-pressed=true]]:bg-gray-900 [&_[aria-pressed=true]]:text-white [&_[aria-pressed=true]]:border-gray-900 [&[data-selecting=false]_.select-box]:hidden"
+  class="mx-auto flex h-full max-w-4xl flex-col px-4 py-6 [&_.msg[data-pending=true]]:opacity-55 [&_.msg[data-failed=true]]:bg-red-50 [&_.msg[data-failed=true]]:border-red-300 [&_.msg[data-starred=true]]:border-l-amber-500 [&_.msg[data-editing=true]_.view]:hidden [&_.msg[data-starred=true]_.star-on]:inline [&_.msg[data-starred=true]_.star-off]:hidden [&_[aria-pressed=true]]:bg-gray-900 [&_[aria-pressed=true]]:text-white [&_[aria-pressed=true]]:border-gray-900 [&[data-selecting=false]_.select-box]:hidden"
   data-controller="chat"
   data-selecting="<%= selecting %>"
 >
   <header class="mb-6 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
     <h1 class="text-2xl font-bold">Chat</h1>
-
-    <div class="flex flex-wrap items-center gap-2 text-sm">
-      <span class="text-gray-500">Unread</span>
-      <button type="button" data-herb-decrement="unread" class="rounded border px-2">&minus;</button>
-      <span class="w-6 text-center font-mono"><%= unread %></span>
-      <button type="button" data-herb-increment="unread" class="rounded border px-2">+</button>
-      <button type="button" data-herb-increment="unread" data-herb-by="5" class="rounded border px-2">+5</button>
-      <button type="button" data-herb-reset="unread" class="text-gray-400 underline">reset</button>
-
-      <% if alerting %>
-        <span class="rounded bg-amber-100 px-2 py-1 text-amber-800">Lots to read</span>
-      <% end %>
-    </div>
   </header>
 
-  <nav class="mb-4 flex flex-wrap items-center gap-2 text-sm [&_button]:whitespace-nowrap">
-    <button type="button" data-herb-set="filter=all" aria-pressed="<%= showing_all %>" class="rounded border px-2 py-1">All</button>
-    <button type="button" data-herb-set="filter=starred" aria-pressed="<%= showing_starred %>" class="rounded border px-2 py-1">Starred</button>
+  <nav class="mb-4 flex justify-between text-sm">
+    <div class="flex items-center gap-2">
+      <button type="button" data-herb-set="filter=all" aria-pressed="<%= showing_all %>" class="rounded border px-2 py-1">All</button>
+      <button type="button" data-herb-set="filter=starred" aria-pressed="<%= showing_starred %>" class="rounded border px-2 py-1">Starred</button>
+      <span class="text-gray-300">|</span>
+      <button type="button" data-herb-toggle="selecting" aria-pressed="<%= selecting %>" class="rounded border px-2 py-1">Select mode</button>
+    </div>
 
-    <select data-herb-set="change->filter=$value" class="rounded border px-2 py-1">
-      <option value="all" selected="<%= filter == "all" %>">All</option>
-      <option value="starred" selected="<%= filter == "starred" %>">Starred</option>
-    </select>
-
-    <button type="button" data-herb-toggle="selecting" aria-pressed="<%= selecting %>" class="rounded border px-2 py-1">Select mode</button>
-
-    <span class="w-full text-gray-500 sm:w-auto">
-      <% case filter %>
-      <% when "all" %>
-        Showing everything
-      <% when "starred" %>
-        Showing starred only
+    <div class="flex gap-2 items-center">
+      <% if q.present? %>
+        <div class="text-gray-500">
+          <%= pluralize(@messages.search(q).count, "match") %>
+        </div>
       <% end %>
-    </span>
+
+      <input value="<%= q %>" placeholder="Search" autocomplete="off" class="rounded border border-gray-300 px-2 py-1">
+    </div>
   </nav>
+
+  <span class="w-full text-gray-500 text-sm sm:w-auto mb-2">
+    <% case filter %>
+    <% when "all" %>
+      Showing everything
+    <% when "starred" %>
+      Showing starred only
+    <% end %>
+  </span>
 
   <div class="mb-4 min-h-0 flex-1 overflow-y-auto">
     <ul data-herb-name="messages" class="space-y-2 list-none">
-    <% @messages.each do |message| %>
+    <% @messages.search(q).each do |message| %>
       <%# herb:key message.id %>
       <%# herb:state (pending: false, failed: false, editing: false, starred: message.starred, confirming: false, selected: false, busy: pending || failed, body_draft: message.body) %>
 
@@ -65,8 +59,9 @@
       <% total_count += 1 %>
 
       <li
-        id="message_<%= message.id %>"
+        id="<%= message.id %>"
         data-message-id="<%= message.id %>"
+        data-herb-transition
         class="msg relative rounded-lg rounded-l-none border border-gray-200 border-l-4 p-3"
         data-pending="<%= pending %>"
         data-failed="<%= failed %>"
@@ -109,7 +104,7 @@
             <span><%= message.sent_label %></span>
           <% end %>
 
-          <% unless busy %>
+          <% unless busy? %>
             <button type="button" data-herb-set="editing=true" class="py-1 underline">Edit</button>
             <button type="button" data-herb-set="confirming=true" class="py-1 underline">Delete</button>
           <% end %>
@@ -129,6 +124,10 @@
     <% if filter == "starred" && starred_count == 0 %>
       <p class="rounded border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
         No starred messages
+      </p>
+    <% elsif total_count == 0 && q.present? %>
+      <p class="rounded border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
+        No message found for "<%= q %>"
       </p>
     <% elsif total_count == 0 %>
       <p class="rounded border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
@@ -175,7 +174,10 @@
     <% end %>
   <% end %>
 
-  <p class="mb-4 text-xs text-gray-500"><%= pending_count %> in flight</p>
+  <div class="flex justify-between mb-4 text-xs text-gray-500">
+    <p><%= draft.length %> character<% if draft.length != 1 %>s<% end %></p>
+    <p><%= pending_count %> in flight</p>
+  </div>
 
   <form action="/chat/messages" method="post" data-herb-into="messages" class="flex items-center gap-2">
     <div class="relative flex-1">
@@ -192,12 +194,12 @@
         type="button"
         data-herb-reset="draft"
         aria-label="Clear"
-        hidden="<%= draft == "" %>"
+        hidden="<%= draft.empty? %>"
         class="absolute inset-y-0 right-0 flex w-9 items-center justify-center text-gray-400 hover:text-gray-600"
       >&times;</button>
     </div>
 
-    <button disabled="<%= draft == "" %>" class="rounded bg-gray-900 px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-40">Send</button>
+    <button disabled="<%= draft.empty? %>" class="rounded bg-gray-900 px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-40">Send</button>
   </form>
 
   <button type="button" data-action="chat#toggleServer" data-chat-target="server" class="mt-4 text-xs text-gray-400 underline">

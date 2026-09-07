@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@layer base {
+  button:not(:disabled),
+  select,
+  summary,
+  input[type="checkbox"],
+  label:has(input[type="checkbox"]) {
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,35 @@
+<%# herb:slots client %>
+
+<div class="mx-auto max-w-4xl px-4 py-6">
+  <header class="mb-6 flex items-baseline justify-between">
+    <h1 class="text-2xl font-bold">Deferred</h1>
+  </header>
+
+  <section class="mb-8">
+    <h2 class="mb-2 text-sm text-gray-500">Async, requested on mount</h2>
+
+    <Async>
+      <% sleep 1 %>
+      <p class="rounded border border-gray-200 bg-gray-50 p-3 text-sm"><%= Geo.slow_stats %></p>
+
+      <Fallback>
+        <p class="animate-pulse rounded border border-gray-200 bg-gray-200 p-3 text-sm">&nbsp;</p>
+      </Fallback>
+    </Async>
+  </section>
+
+  <div class="h-[1600px] rounded border border-dashed border-gray-200 p-3 text-sm text-gray-700">Keep scrolling for the lazy block</div>
+
+  <section class="mt-8">
+    <h2 class="mb-2 text-sm text-gray-500">Lazy, requested when it scrolls into view</h2>
+
+    <Lazy>
+      <% sleep 1 %>
+      <p class="rounded border border-gray-200 bg-gray-50 p-3 text-sm"><%= Geo.slow_facts %></p>
+
+      <Fallback>
+        <p class="animate-pulse rounded border border-gray-200 bg-gray-200 p-3 text-sm">&nbsp;</p>
+      </Fallback>
+    </Lazy>
+  </section>
+</div>

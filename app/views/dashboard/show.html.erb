@@ -1,0 +1,203 @@
+<%# herb:slots client %>
+
+<div class="mx-auto max-w-4xl px-4 py-6">
+  <header class="mb-6 flex items-baseline justify-between">
+    <h1 class="text-2xl font-bold">Dashboard</h1>
+    <p class="hidden text-sm text-gray-500 sm:block">every tile loads in parallel, scoped to itself</p>
+  </header>
+
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+    <section class="rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-1 text-xs uppercase tracking-wide text-gray-500">Cities</h2>
+
+      <Async>
+        <% sleep 0.5 %>
+
+        <p data-herb-transition="stat-cities" class="text-2xl font-bold"><%= Geo.all_cities.size %></p>
+        <Fallback><p data-herb-transition="stat-cities" class="h-8 w-16 animate-pulse rounded bg-gray-200"></p></Fallback>
+      </Async>
+    </section>
+
+    <section class="rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-1 text-xs uppercase tracking-wide text-gray-500">Countries</h2>
+
+      <Async>
+        <% sleep 0.7 %>
+
+        <p data-herb-transition="stat-countries" class="text-2xl font-bold"><%= Geo::DATA.values.flat_map(&:keys).uniq.size %></p>
+        <Fallback><p data-herb-transition="stat-countries" class="h-8 w-16 animate-pulse rounded bg-gray-200"></p></Fallback>
+      </Async>
+    </section>
+
+    <section class="rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-1 text-xs uppercase tracking-wide text-gray-500">Continents</h2>
+
+      <Async>
+        <% sleep 0.9 %>
+
+        <p data-herb-transition="stat-continents" class="text-2xl font-bold"><%= Geo::DATA.size %></p>
+        <Fallback><p data-herb-transition="stat-continents" class="h-8 w-16 animate-pulse rounded bg-gray-200"></p></Fallback>
+      </Async>
+    </section>
+
+    <section class="col-span-2 rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-2 text-xs uppercase tracking-wide text-gray-500">Cities per continent</h2>
+
+      <Async>
+        <% sleep 1.1 %>
+
+        <div data-herb-transition="chart-continents" class="space-y-2">
+          <% Geo.continent_city_counts.each do |entry| %>
+            <div herb-key="<%= entry[:name] %>" class="flex items-center gap-2 text-sm">
+              <span class="w-28 shrink-0 text-gray-600"><%= entry[:name] %></span>
+              <div class="h-4 flex-1 rounded bg-gray-100">
+                <div class="h-4 rounded bg-lime-400" style="width: <%= entry[:percent] %>%"></div>
+              </div>
+              <span class="w-6 text-right font-semibold tabular-nums"><%= entry[:count] %></span>
+            </div>
+          <% end %>
+        </div>
+
+        <Fallback>
+          <div data-herb-transition="chart-continents" class="space-y-2">
+            <div class="h-4 animate-pulse rounded bg-gray-200"></div>
+            <div class="h-4 w-2/3 animate-pulse rounded bg-gray-200"></div>
+            <div class="h-4 w-1/3 animate-pulse rounded bg-gray-200"></div>
+          </div>
+        </Fallback>
+      </Async>
+    </section>
+
+    <section class="rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-1 text-xs uppercase tracking-wide text-gray-500">Server time</h2>
+
+      <Async poll="1000">
+        <p data-herb-transition="stat-clock" class="text-2xl font-bold tabular-nums"><%= Time.now.strftime("%H:%M:%S") %></p>
+        <Fallback><p data-herb-transition="stat-clock" class="h-8 w-24 animate-pulse rounded bg-gray-200"></p></Fallback>
+      </Async>
+    </section>
+
+    <section class="rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-1 text-xs uppercase tracking-wide text-gray-500">On rotation</h2>
+
+      <Async poll="4000">
+        <% album = Music.albums.sample %>
+        <div data-herb-transition="tile-rotation">
+          <p class="truncate font-semibold"><%= album[:title] %></p>
+          <p class="truncate text-sm text-gray-500"><%= album[:artist] %></p>
+          <p class="mt-1 text-xs text-gray-400"><%= album[:year] %> &middot; <%= Music::TRACKS[album[:id]].size %> tracks</p>
+        </div>
+
+        <Fallback>
+          <div data-herb-transition="tile-rotation" class="space-y-2">
+            <div class="h-4 w-32 animate-pulse rounded bg-gray-200"></div>
+            <div class="h-3 w-24 animate-pulse rounded bg-gray-200"></div>
+            <div class="h-3 w-20 animate-pulse rounded bg-gray-200"></div>
+          </div>
+        </Fallback>
+      </Async>
+    </section>
+
+    <section class="rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-2 text-xs uppercase tracking-wide text-gray-500">Services</h2>
+
+      <Async poll="2500">
+        <ul data-herb-transition="tile-services" class="space-y-1.5 text-sm">
+          <% Ops.services.each do |service| %>
+            <li herb-key="<%= service[:name] %>" class="flex items-center gap-2">
+              <span class="h-2 w-2 rounded-full <%= service[:up] ? "bg-emerald-500" : "bg-amber-500" %>"></span>
+              <span class="text-gray-600"><%= service[:name] %></span>
+              <span class="ml-auto text-xs <%= service[:up] ? "text-emerald-600" : "text-amber-600" %>"><%= service[:label] %></span>
+            </li>
+          <% end %>
+        </ul>
+
+        <Fallback>
+          <ul data-herb-transition="tile-services" class="space-y-2">
+            <li class="h-3 animate-pulse rounded bg-gray-200"></li>
+            <li class="h-3 animate-pulse rounded bg-gray-200"></li>
+            <li class="h-3 animate-pulse rounded bg-gray-200"></li>
+          </ul>
+        </Fallback>
+      </Async>
+    </section>
+
+    <section class="rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-2 text-xs uppercase tracking-wide text-gray-500">Latest releases</h2>
+
+      <Async>
+        <% sleep 0.8 %>
+
+        <ul data-herb-transition="tile-releases" class="space-y-1 text-sm">
+          <% Music.latest_releases.each do |album| %>
+            <li herb-key="<%= album[:id] %>" class="flex items-baseline gap-2">
+              <span class="truncate text-gray-700"><%= album[:title] %></span>
+              <span class="ml-auto text-xs tabular-nums text-gray-400"><%= album[:year] %></span>
+            </li>
+          <% end %>
+        </ul>
+
+        <Fallback>
+          <ul data-herb-transition="tile-releases" class="space-y-2">
+            <li class="h-3 animate-pulse rounded bg-gray-200"></li>
+            <li class="h-3 w-4/5 animate-pulse rounded bg-gray-200"></li>
+            <li class="h-3 animate-pulse rounded bg-gray-200"></li>
+            <li class="h-3 w-3/4 animate-pulse rounded bg-gray-200"></li>
+          </ul>
+        </Fallback>
+      </Async>
+    </section>
+
+    <section class="rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-1 text-xs uppercase tracking-wide text-gray-500">Largest</h2>
+
+      <Async>
+        <% sleep 0.8 %>
+
+        <p data-herb-transition="stat-largest" class="text-2xl font-bold">
+          <%= Geo::DATA.max_by { |_, countries| countries.values.flat_map(&:values).flatten.size }[0] %>
+        </p>
+
+        <Fallback><p data-herb-transition="stat-largest" class="h-8 w-24 animate-pulse rounded bg-gray-200"></p></Fallback>
+      </Async>
+    </section>
+
+    <section class="rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-1 text-xs uppercase tracking-wide text-gray-500">States</h2>
+
+      <Async>
+        <% sleep 0.6 %>
+
+        <p data-herb-transition="stat-states" class="text-2xl font-bold"><%= Geo::DATA.values.flat_map(&:values).flat_map(&:keys).size %></p>
+        <Fallback><p data-herb-transition="stat-states" class="h-8 w-16 animate-pulse rounded bg-gray-200"></p></Fallback>
+      </Async>
+    </section>
+
+    <section class="rounded-lg border border-gray-200 p-4">
+      <h2 class="mb-2 text-xs uppercase tracking-wide text-gray-500">Longest album</h2>
+
+      <Async>
+        <% sleep 1.0 %>
+
+        <% longest_id, longest_tracks = Music::TRACKS.max_by { |_, tracks| tracks.size } %>
+
+        <div data-herb-transition="tile-longest">
+          <p class="truncate font-semibold"><%= Music.title(longest_id) %></p>
+          <div class="mt-2 h-2 rounded bg-gray-100">
+            <div class="h-2 rounded bg-lime-400" style="width: 100%"></div>
+          </div>
+
+          <p class="mt-1 text-xs text-gray-400"><%= longest_tracks.size %> tracks</p>
+        </div>
+
+        <Fallback>
+          <div data-herb-transition="tile-longest" class="space-y-2">
+            <div class="h-4 w-28 animate-pulse rounded bg-gray-200"></div>
+            <div class="h-2 animate-pulse rounded bg-gray-200"></div>
+            <div class="h-3 w-16 animate-pulse rounded bg-gray-200"></div>
+          </div>
+        </Fallback>
+      </Async>
+    </section>
+  </div>
+</div>
