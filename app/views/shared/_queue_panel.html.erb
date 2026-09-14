@@ -1,0 +1,28 @@
+<%# herb:slots client %>
+<%# herb:state (open: false) %>
+
+<aside data-open="<%= open %>" data-herb-set="keydown.escape@window->open=false" class="fixed z-30 bg-white shadow-xl transition-transform duration-300 inset-y-0 right-0 w-80 max-w-[85vw] p-5 translate-x-full data-[open=true]:translate-x-0 max-sm:inset-x-0 max-sm:top-auto max-sm:bottom-0 max-sm:w-auto max-sm:max-w-none max-sm:max-h-[70vh] max-sm:overflow-y-auto max-sm:rounded-t-2xl max-sm:p-4 max-sm:pb-8 max-sm:shadow-[0_-12px_40px_rgb(0_0_0/0.25)] max-sm:translate-x-0 max-sm:translate-y-full max-sm:data-[open=true]:translate-y-0">
+  <button type="button" data-herb-set="open=false" class="mb-1 flex w-full justify-center pb-2 pt-1 sm:hidden" aria-label="Close">
+    <span class="h-1 w-10 rounded-full bg-gray-200"></span>
+  </button>
+
+  <div class="flex items-baseline justify-between">
+    <h2 class="text-lg font-bold">Up next</h2>
+    <button type="button" data-herb-set="open=false" class="rounded border border-gray-300 bg-white px-2 py-0.5 text-sm hover:border-lime-500">Close</button>
+  </div>
+
+  <p class="mb-4 mt-1 text-xs text-gray-500">This panel owns its own <code>open</code> state, bound to the page's.</p>
+
+  <ul class="space-y-3 text-sm">
+    <% Music.albums.first(4).each_with_index do |a, i| %>
+      <li herb-key="<%= a[:id] %>" class="flex items-center gap-3">
+        <img src="<%= Music.cover_url(a[:id]) %>" alt="" class="h-10 w-10 rounded object-cover shadow">
+        <div class="min-w-0">
+          <p class="truncate font-semibold"><%= Music.tracks(a[:id]).first[:title] %></p>
+          <p class="truncate text-xs text-gray-500"><%= a[:artist] %></p>
+        </div>
+        <span class="ml-auto text-xs tabular-nums text-gray-400"><%= Music.tracks(a[:id]).first[:duration] %></span>
+      </li>
+    <% end %>
+  </ul>
+</aside>

@@ -154,10 +154,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.28.2.tgz#b21affb804cc167c133d95f45b3a1dc1323b9a87"
   integrity sha512-5ebpxr3nWMzrL/rnUI755Jkuee0bHL/Gq0WTF9lvcpv73wAp5eu8MfBUgWK9bhWvZjj7yX8etf/8tI8Ney695g==
 
-"@herb-tools/client@https://pkg.pr.new/marcoroth/herb/@herb-tools/client@1682983":
+"@herb-tools/client@https://pkg.pr.new/marcoroth/herb/@herb-tools/client@9040568":
   version "0.10.3"
-  resolved "https://pkg.pr.new/marcoroth/herb/@herb-tools/client@1682983"
-  integrity sha512-DtbLKhP1lA6gTT+mmUgxqeKSdBVkrlbZw1cppP6iktV80FAfN72zkozcMkbJjotOwXlLAuZDqWLQ1e0b2C29Ag==
+  uid "8f06c277c8fa50d32ae2bcd82cf9f907399361f7"
+  resolved "https://pkg.pr.new/marcoroth/herb/@herb-tools/client@9040568#8f06c277c8fa50d32ae2bcd82cf9f907399361f7"
 
 "@hotwired/stimulus@^3.2.2":
   version "3.2.2"
@@ -634,6 +634,12 @@ picomatch@^2.3.1:
   version "2.3.2"
   resolved "https://registry.npmjs.org/picomatch/-/picomatch-2.3.2.tgz"
   integrity sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==
+
+"reactionview@https://pkg.pr.new/marcoroth/reactionview@9895b40":
+  version "0.4.0"
+  resolved "https://pkg.pr.new/marcoroth/reactionview@9895b40#fd0f4f71b6018321f5d7c7ed55964e90bb35871d"
+  dependencies:
+    "@herb-tools/client" "https://pkg.pr.new/marcoroth/herb/@herb-tools/client@9040568"
 
 source-map-js@^1.2.1:
   version "1.2.1"

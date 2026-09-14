@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { useState } from "@herb-tools/client/stimulus"
-import { stateFor, slotsRequest } from "@herb-tools/client"
+import { useState, stateFor, slotsRequest } from "reactionview"
 import { post } from "@rails/request.js"
 
 export default class extends Controller {

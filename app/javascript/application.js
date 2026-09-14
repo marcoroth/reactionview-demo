@@ -2,8 +2,9 @@
 import "@hotwired/turbo-rails"
 import "./controllers"
 
-import { Runtime } from '@herb-tools/client'
+import { Runtime } from "reactionview"
+import * as Moly from "moly-ui"
 
-Runtime.start({ state: { debounce: 150 } })
+const runtime = Runtime.start()
 
-window.HerbRuntime = Runtime
+Moly.install(runtime, { drawer: { themeColor: true }, toaster: { closeButton: true } })

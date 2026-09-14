@@ -1,7 +1,7 @@
 <%# herb:slots client %>
 <%# herb:state (continent: "", country: "", state: "") %>
 
-<div class="mx-auto max-w-2xl px-4 py-6">
+<div class="mx-auto max-w-4xl px-4 py-6">
   <header class="mb-6 flex items-baseline justify-between">
     <h1 class="text-2xl font-bold">Where to?</h1>
   </header>
@@ -46,7 +46,14 @@
 
     <% if state.present? %>
       <p id="cities" class="rounded border border-gray-200 bg-gray-50 p-3">
-        You could live in <%= Geo.cities(continent, country, state).to_sentence(two_words_connector: " or ", last_word_connector: " or ") %>
+        You could live in
+        <Fragment>
+          <%= Geo.cities(continent, country, state).to_sentence(two_words_connector: " or ", last_word_connector: " or ") %>
+
+          <Fallback>
+            <div class="bg-gray-200 w-32 rounded animate-pulse inline-block">&nbsp;</div>
+          </Fallback>
+        </Fragment>
       </p>
     <% end %>
   </div>

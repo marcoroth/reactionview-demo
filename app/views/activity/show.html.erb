@@ -1,39 +1,32 @@
 <%# herb:slots server %>
-<%# herb:state (note: "") %>
+<%# herb:state (filter: "") %>
 
-<div class="mx-auto max-w-2xl px-4 py-6">
-  <header class="mb-6 flex items-baseline justify-between">
-    <h1 class="text-2xl font-bold">Activity (server slots)</h1>
+<div class="mx-auto max-w-4xl px-4 py-6">
+  <header class="mb-6 flex items-center justify-between gap-3">
+    <h1 class="text-2xl font-bold">Activity</h1>
 
-    <button type="button" data-herb-action="$refresh" class="rounded border px-2 py-1 text-sm">Refresh</button>
+    <button type="button" data-herb-action="$refresh" class="rounded border border-gray-300 bg-white px-3 py-1 text-sm hover:border-lime-500">Refresh</button>
   </header>
 
-  <dl class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm [&_dt]:text-gray-500 [&_dd]:font-mono">
-    <dt>Messages</dt>
-    <dd id="total"><%= Message.count %></dd>
-
-    <dt>Rendered at</dt>
-    <dd id="time"><%= Time.current.strftime("%H:%M:%S.%L") %></dd>
-  </dl>
-
-  <p id="parity" class="mt-4 text-sm text-gray-500">
-    <% if Time.current.sec.even? %>
-      Server rendered an even second: <%= Time.current.sec %>
-    <% else %>
-      Server rendered an odd second: <%= Time.current.sec %>
+  <div class="mb-6 flex flex-wrap gap-2 text-sm">
+    <% @kinds.each do |kind, label| %>
+      <button herb-key="<%= label %>" type="button" data-herb-set="filter='<%= kind %>'" class="rounded-full border px-3 py-1 transition <%= filter == kind ? "border-lime-500 bg-lime-50 font-semibold text-lime-700" : "border-gray-300 bg-white text-gray-600 hover:border-lime-500" %>">
+        <%= label %>
+      </button>
     <% end %>
-  </p>
-
-  <div class="mt-6 text-sm">
-    <input value="<%= note %>" placeholder="Type a note" class="rounded border border-gray-300 px-2 py-1" id="note-input">
-    <p class="mt-2">Echo: <span id="echo"><%= note %></span></p>
-
-    <p id="note-state" class="mt-2 text-gray-500">
-      <% if note.empty? %>
-        <span>Nothing noted yet</span>
-      <% else %>
-        <span>Noted!</span>
-      <% end %>
-    </p>
   </div>
+
+  <ol class="relative ml-3 space-y-5 border-l border-gray-200 pl-6">
+    <% @feed.each do |event| %>
+      <li herb-key="<%= event[:id] %>" class="relative">
+        <span class="absolute -left-9 flex h-6 w-6 items-center justify-center rounded-full bg-white text-sm ring-1 ring-gray-200"><%= event[:icon] %></span>
+        <p class="text-sm text-gray-900"><%= event[:text] %></p>
+        <p class="mt-0.5 text-xs text-gray-400"><%= event[:actor] %> &middot; <%= event[:at] %></p>
+      </li>
+    <% end %>
+  </ol>
+
+  <p class="mt-8 text-xs text-gray-400">
+    Rendered by the server at <%= Time.current.strftime("%H:%M:%S") %>. Every filter and branch on this page is chosen server-side, the client only swaps values in.
+  </p>
 </div>

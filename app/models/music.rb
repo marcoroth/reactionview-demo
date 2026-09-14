@@ -55,6 +55,10 @@ module Music
 
   def self.track_count(id) = (TRACKS[id] || []).size
 
+  def self.cover_url(id)
+    "https://picsum.photos/seed/#{id}/300/300"
+  end
+
   def self.latest_releases
     ALBUMS.sort_by { |album| -album[:year] }.first(4)
   end

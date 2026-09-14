@@ -1,39 +1,62 @@
 <%# herb:slots client %>
-<%# herb:state (modal: false, panel: false, alert: "") %>
+<%# herb:state (modal_album: "", modal_title: "", modal_artist: "", panel: false, alert: "") %>
 
-<div class="mx-auto max-w-2xl px-4 py-6">
+<div class="mx-auto max-w-4xl px-4 py-6">
   <header class="mb-6 flex items-baseline justify-between">
     <h1 class="text-2xl font-bold">Overlays</h1>
-
+    <p class="hidden text-sm text-gray-500 sm:block">every layer is plain state, no portals in sight</p>
   </header>
 
-  <div class="flex flex-wrap gap-2 text-sm">
-    <button type="button" data-herb-set="modal=true" class="rounded border px-3 py-1">Open dialog</button>
-    <button type="button" data-herb-toggle="panel" class="rounded border px-3 py-1">Slide in panel</button>
-    <button type="button" data-herb-set="alert='All systems are humming along'" class="rounded border px-3 py-1">Full-screen alert</button>
+  <div class="mb-6 flex flex-wrap gap-2 text-sm">
+    <button type="button" data-herb-toggle="panel" class="rounded border border-gray-300 bg-white px-3 py-1 hover:border-lime-500">Slide in the queue</button>
+    <button type="button" data-herb-set="alert='All systems are humming along'" class="rounded border border-gray-300 bg-white px-3 py-1 hover:border-lime-500">Full-screen alert</button>
   </div>
 
-  <% if modal %>
-    <div class="fixed inset-0 z-40" data-herb-set="keydown.escape@window->modal=false">
-      <div class="absolute inset-0 bg-gray-900/50 transition-opacity duration-200 starting:opacity-0" data-herb-set="modal=false"></div>
+  <p class="mb-3 text-xs uppercase tracking-wide text-gray-500">Pick an album for a dialog</p>
 
-      <div class="absolute left-1/2 top-1/3 w-80 -translate-x-1/2 scale-100 rounded-lg bg-white p-6 shadow-xl transition-[opacity,scale] duration-200 starting:scale-95 starting:opacity-0">
-        <h2 class="mb-2 text-lg font-bold">Delete everything?</h2>
-        <p class="mb-4 text-sm text-gray-500"><%= Message.count %> messages would be gone forever.</p>
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+    <% Music.albums.first(4).each do |a| %>
+      <button herb-key="<%= a[:id] %>" type="button" class="group text-left" data-herb-set="modal_album='<%= a[:id] %>' modal_title='<%= a[:title] %>' modal_artist='<%= a[:artist] %>'">
+        <%= render "shared/album_card", album: a %>
+      </button>
+    <% end %>
+  </div>
 
-        <div class="flex justify-end gap-2 text-sm">
-          <button type="button" data-herb-set="modal=false" class="rounded border px-3 py-1">Cancel</button>
-          <button type="button" data-herb-set="modal=false alert='Nothing was deleted, you are safe'" class="rounded bg-red-600 px-3 py-1 text-white">Pretend</button>
+  <% if modal_album.present? %>
+    <div class="fixed inset-0 z-40" data-herb-set="keydown.escape@window->modal_album=''">
+      <div class="absolute inset-0 bg-gray-900/50 transition-opacity duration-200 starting:opacity-0" data-herb-set="modal_album=''"></div>
+
+      <div class="absolute left-1/2 top-1/4 w-[22rem] max-w-[calc(100vw-2rem)] -translate-x-1/2 scale-100 rounded-xl bg-white p-5 shadow-xl transition-[opacity,scale] duration-200 starting:scale-95 starting:opacity-0">
+        <div class="flex gap-4">
+          <img src="<%= Music.cover_url(modal_album) %>" alt="" class="h-24 w-24 rounded-lg object-cover shadow">
+
+          <div class="min-w-0">
+            <h2 class="truncate text-lg font-bold"><%= modal_title %></h2>
+            <p class="text-sm text-gray-500">
+              <%= modal_artist %> &middot; <%= Music.year(modal_album) %> &middot; <%= Music.track_count(modal_album) %> tracks
+            </p>
+          </div>
+        </div>
+
+        <ul class="mt-4 space-y-1 text-sm tabular-nums">
+          <% Music.tracks(modal_album).first(3).each do |entry| %>
+            <li herb-key="<%= entry[:number] %>" class="flex items-baseline gap-3">
+              <span class="w-4 text-right text-gray-400"><%= entry[:number] %></span>
+              <span class="truncate text-gray-700"><%= entry[:title] %></span>
+              <span class="ml-auto text-xs text-gray-400"><%= entry[:duration] %></span>
+            </li>
+          <% end %>
+        </ul>
+
+        <div class="mt-4 flex justify-end gap-2 text-sm">
+          <button type="button" data-herb-set="modal_album=''" class="rounded border border-gray-300 bg-white px-3 py-1 hover:border-lime-500">Close</button>
+          <button type="button" data-herb-set="modal_album='' alert='Queued up, headphones on'" class="rounded bg-lime-500 px-3 py-1 font-semibold text-white hover:bg-lime-600">Queue it</button>
         </div>
       </div>
     </div>
   <% end %>
 
-  <aside data-open="<%= panel %>" data-herb-set="keydown.escape@window->panel=false" class="fixed inset-y-0 right-0 z-30 w-72 translate-x-full bg-white p-6 shadow-xl transition-transform duration-300 data-[open=true]:translate-x-0">
-    <h2 class="mb-2 text-lg font-bold">Side panel</h2>
-    <p class="mb-4 text-sm text-gray-500">This element never unmounts, so the slide out animates just like the slide in.</p>
-    <button type="button" data-herb-set="panel=false" class="rounded border px-3 py-1 text-sm">Close</button>
-  </aside>
+  <%= render "shared/queue_panel", state: { open: panel } %>
 
   <% if alert.present? %>
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-emerald-600 text-white" data-herb-set="keydown.escape@window->alert=''">

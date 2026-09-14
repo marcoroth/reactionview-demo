@@ -494,7 +494,7 @@
   <div class="album-grid">
     <% Music.albums.each_with_index do |a, i| %>
       <button herb-key="<%= a[:id] %>" type="button" class="album-card" style="order: <%= i %>" data-herb-set="album_title='<%= a[:title] %>' album_artist='<%= a[:artist] %>' album='<%= a[:id] %>' album_index=<%= i %>">
-        <img src="https://picsum.photos/seed/<%= a[:id] %>/300/300" alt="">
+        <img src="<%= Music.cover_url(a[:id]) %>" alt="">
         <p class="album-title"><%= a[:title] %></p>
         <p class="album-artist"><%= a[:artist] %></p>
       </button>
@@ -504,7 +504,7 @@
       <section class="detail" tabindex="-1" autofocus style="order: <%= album_index %>">
         <button type="button" class="sheet-handle" data-herb-set="album=''" aria-label="Close"><span></span></button>
 
-        <img class="cover" src="https://picsum.photos/seed/<%= album %>/300/300" alt="">
+        <img class="cover" src="<%= Music.cover_url(album) %>" alt="">
 
         <div class="detail-body">
           <h2><%= album_title %></h2>
@@ -569,7 +569,7 @@
 
       <div class="now-playing-inner">
         <% if track.present? && track != "" %>
-          <img data-herb-transition="now-playing-art" src="https://picsum.photos/seed/<%= track %>/300/300" alt="">
+          <img data-herb-transition="now-playing-art" src="<%= Music.cover_url(track) %>" alt="">
         <% end %>
 
         <div class="now-playing-info">
