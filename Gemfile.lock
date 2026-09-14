@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/marcoroth/herb.git
-  revision: a3edae4c1057b49da1c6469ed7e058307e193f47
+  revision: a840880a09f6884369f5921c21606269269245a1
   branch: main
   specs:
     herb (0.10.3)
@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: https://github.com/marcoroth/reactionview.git
-  revision: 9895b40506394b0f1a4bd0e6d72a3ea05780a3aa
+  revision: 42bf1a02dd51e2fb76913dff89ae9c21f3e6965b
   branch: main
   specs:
     reactionview (0.4.0)

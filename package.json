@@ -14,7 +14,7 @@
     "@rails/request.js": "^0.0.13",
     "@tailwindcss/cli": "^4.3.3",
     "moly-ui": "https://pkg.pr.new/moly-ui@a028f36",
-    "reactionview": "https://pkg.pr.new/marcoroth/reactionview@9895b40",
+    "reactionview": "https://pkg.pr.new/marcoroth/reactionview@42bf1a0",
     "tailwindcss": "^4.3.3"
   }
 }
