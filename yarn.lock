@@ -159,6 +159,10 @@
   uid "8f06c277c8fa50d32ae2bcd82cf9f907399361f7"
   resolved "https://pkg.pr.new/marcoroth/herb/@herb-tools/client@9040568#8f06c277c8fa50d32ae2bcd82cf9f907399361f7"
 
+"@herb-tools/client@https://pkg.pr.new/marcoroth/herb/@herb-tools/client@e34b265":
+  version "0.10.3"
+  resolved "https://pkg.pr.new/@herb-tools/client@9040568#8f06c277c8fa50d32ae2bcd82cf9f907399361f7"
+
 "@hotwired/stimulus@^3.2.2":
   version "3.2.2"
   resolved "https://registry.npmjs.org/@hotwired/stimulus/-/stimulus-3.2.2.tgz"
@@ -614,6 +618,12 @@ micromatch@^4.0.5:
   dependencies:
     braces "^3.0.3"
     picomatch "^2.3.1"
+
+"moly-ui@https://pkg.pr.new/moly-ui@a028f36":
+  version "0.0.2"
+  resolved "https://pkg.pr.new/moly-ui@a028f36#54c20dfbfafc1d337bb318b6a7e6e814f84988c2"
+  dependencies:
+    "@herb-tools/client" "https://pkg.pr.new/marcoroth/herb/@herb-tools/client@e34b265"
 
 mri@^1.2.0:
   version "1.2.0"

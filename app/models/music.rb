@@ -15,26 +15,26 @@ module Music
     { id: "night-bus", title: "Night Bus", artist: "Linie Elf", year: 2021 },
     { id: "supply-chain", title: "Supply Chain", artist: "Logistik", year: 2024 },
     { id: "white-label", title: "White Label", artist: "Untitled Artists", year: 2017 },
-    { id: "control-room", title: "Control Room", artist: "Fader Union", year: 2025 },
+    { id: "control-room", title: "Control Room", artist: "Fader Union", year: 2025 }
   ].freeze
 
   TRACKS = {
-    "warehouse-frequencies" => ["Loading Dock", "Forklift Funk", "Pallet Shuffle", "Concrete Reverb", "Roller Door", "Last Shift"],
-    "acid-archive" => ["Resonance Peak", "Squelch", "Slide and Accent", "Silver Box", "Battery Backup"],
-    "voltage-controlled" => ["Patch Cable", "Sawtooth Sunrise", "Envelope Follower", "Ring Mod", "Feedback Path", "Ground Hum", "Power Down"],
-    "rhine-pressure" => ["Hafenbecken", "Dreirosen Dub", "Fasnacht 909", "Kleinbasel Kick", "Rheinschwumm"],
-    "sub-terrain" => ["Sub Level One", "Foundation", "Bedrock", "Seismic Load", "Emergency Exit"],
-    "monotone" => ["Grey Loop", "Beige Noise", "Off White", "Anthracite", "Charcoal Fade"],
-    "afterhours" => ["Doors at Four", "No Requests", "Strobe Fatigue", "Coat Check", "Blinds Down", "Tram Home"],
-    "sequenced" => ["Step One", "Gate Length", "Swing Amount", "Ratchet", "Probability", "Reset Trigger"],
-    "peak-time" => ["Queue Outside", "Cloakroom Rush", "Main Room", "Hands Up", "Rewind", "Encore Encore"],
-    "cold-storage" => ["Frost Pattern", "Minus Eighteen", "Compressor Cycle", "Defrost", "Ice Sheet"],
-    "dreiland" => ["Customs Check", "Tram Eight", "Weil am Rhein", "Saint-Louis", "Passport Techno", "Border Stone"],
-    "tape-hiss" => ["Side A", "Dropout", "Wow and Flutter", "Splice", "Leader Tape", "Side B"],
-    "night-bus" => ["Last Departure", "Empty Seats", "Window Fog", "Request Stop", "Depot"],
-    "supply-chain" => ["Just In Time", "Container Stack", "Manifest", "Cross Dock", "Final Mile"],
-    "white-label" => ["Untitled A1", "Untitled A2", "Untitled B1", "Promo Only", "Runout Groove"],
-    "control-room" => ["Talkback", "Gain Staging", "Solo Bus", "Mute Group", "Fade Out", "Bounce Down"],
+    "warehouse-frequencies" => [ "Loading Dock", "Forklift Funk", "Pallet Shuffle", "Concrete Reverb", "Roller Door", "Last Shift" ],
+    "acid-archive" => [ "Resonance Peak", "Squelch", "Slide and Accent", "Silver Box", "Battery Backup" ],
+    "voltage-controlled" => [ "Patch Cable", "Sawtooth Sunrise", "Envelope Follower", "Ring Mod", "Feedback Path", "Ground Hum", "Power Down" ],
+    "rhine-pressure" => [ "Hafenbecken", "Dreirosen Dub", "Fasnacht 909", "Kleinbasel Kick", "Rheinschwumm" ],
+    "sub-terrain" => [ "Sub Level One", "Foundation", "Bedrock", "Seismic Load", "Emergency Exit" ],
+    "monotone" => [ "Grey Loop", "Beige Noise", "Off White", "Anthracite", "Charcoal Fade" ],
+    "afterhours" => [ "Doors at Four", "No Requests", "Strobe Fatigue", "Coat Check", "Blinds Down", "Tram Home" ],
+    "sequenced" => [ "Step One", "Gate Length", "Swing Amount", "Ratchet", "Probability", "Reset Trigger" ],
+    "peak-time" => [ "Queue Outside", "Cloakroom Rush", "Main Room", "Hands Up", "Rewind", "Encore Encore" ],
+    "cold-storage" => [ "Frost Pattern", "Minus Eighteen", "Compressor Cycle", "Defrost", "Ice Sheet" ],
+    "dreiland" => [ "Customs Check", "Tram Eight", "Weil am Rhein", "Saint-Louis", "Passport Techno", "Border Stone" ],
+    "tape-hiss" => [ "Side A", "Dropout", "Wow and Flutter", "Splice", "Leader Tape", "Side B" ],
+    "night-bus" => [ "Last Departure", "Empty Seats", "Window Fog", "Request Stop", "Depot" ],
+    "supply-chain" => [ "Just In Time", "Container Stack", "Manifest", "Cross Dock", "Final Mile" ],
+    "white-label" => [ "Untitled A1", "Untitled A2", "Untitled B1", "Promo Only", "Runout Groove" ],
+    "control-room" => [ "Talkback", "Gain Staging", "Solo Bus", "Mute Group", "Fade Out", "Bounce Down" ]
   }.freeze
 
   def self.albums = ALBUMS

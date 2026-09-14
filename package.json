@@ -13,6 +13,7 @@
     "@hotwired/turbo-rails": "^8.0.23",
     "@rails/request.js": "^0.0.13",
     "@tailwindcss/cli": "^4.3.3",
+    "moly-ui": "https://pkg.pr.new/moly-ui@a028f36",
     "reactionview": "https://pkg.pr.new/marcoroth/reactionview@9895b40",
     "tailwindcss": "^4.3.3"
   }

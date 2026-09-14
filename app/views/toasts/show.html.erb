@@ -1,0 +1,139 @@
+<%# herb:slots client %>
+<%# herb:state (position: "bottom-right") %>
+
+<div class="min-h-full bg-white" data-controller="toasts">
+  <div class="mx-auto max-w-4xl px-4 py-6">
+    <header class="mb-6 flex items-baseline justify-between">
+      <h1 class="text-2xl font-bold">Toasts</h1>
+
+      <p class="hidden text-sm text-gray-500 sm:block">one stack, fed from JavaScript or straight from the server</p>
+    </header>
+
+    <p class="mb-8 text-sm text-gray-500">
+      The toaster is a single <code class="rounded bg-gray-100 px-1">&lt;ol data-moly-toaster&gt;</code>, at the bottom
+      of this page so the corner can be state driven. In a real application it belongs in the layout.
+      A behavior measures each toast, stacks them, runs the timers and handles the swipe. Everything you see is CSS
+      driven by the custom properties it writes, so the page owns the look.
+      Hover the stack to expand it and pause every timer, drag a toast toward the nearest edge to dismiss it, or press Escape.
+    </p>
+
+    <section class="mb-10">
+      <h2 class="mb-1 text-sm font-semibold text-gray-900">From JavaScript</h2>
+      <p class="mb-4 text-sm text-gray-500">
+        <code class="rounded bg-gray-100 px-1">toast()</code> is imperative and works from anywhere. These buttons go
+        through a five line Stimulus controller.
+      </p>
+
+      <div class="flex flex-wrap gap-2">
+        <% [
+          ["plain", "Message"],
+          ["success", "Success"],
+          ["error", "Error"],
+          ["warning", "Warning"],
+          ["info", "Info"],
+          ["describe", "With a description"],
+          ["undo", "With an action"],
+          ["promise", "Promise"],
+          ["sticky", "Stays until closed"],
+          ["many", "Five in a row"],
+        ].each do |action, label| %>
+          <button type="button" data-action="toasts#<%= action %>" class="rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:border-gray-300 hover:bg-gray-50">
+            <%= label %>
+          </button>
+        <% end %>
+
+        <button type="button" data-action="toasts#dismiss" class="rounded-lg border border-transparent px-3 py-1.5 text-sm font-medium text-gray-400 transition hover:text-gray-700">
+          Dismiss all
+        </button>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-1 text-sm font-semibold text-gray-900">From a Rails flash</h2>
+      <p class="mb-4 text-sm text-gray-500">
+        These post, set <code class="rounded bg-gray-100 px-1">flash</code> and redirect. The layout renders the flash
+        as list items inside the toaster, and the behavior adopts them on connect with timers and swipe intact. No
+        JavaScript is involved, and <code class="rounded bg-gray-100 px-1">notice</code> and
+        <code class="rounded bg-gray-100 px-1">alert</code> land as success and error.
+      </p>
+
+      <div class="flex flex-wrap gap-2">
+        <% ToastsController::KINDS.each_key do |kind| %>
+          <%= button_to kind.capitalize, "/toasts/notify", params: { kind: kind }, class: "rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:border-gray-300 hover:bg-gray-50" %>
+        <% end %>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-1 text-sm font-semibold text-gray-900">Where it sits</h2>
+      <p class="mb-4 text-sm text-gray-500">
+        The corner is the value of the attribute the behavior is registered on, and here it comes from
+        <code class="rounded bg-gray-100 px-1">herb:state</code>. Changing it re-places the whole stack, because the
+        behavior is handed the new value and the stylesheet anchors off the same attribute.
+      </p>
+
+      <div class="flex flex-wrap gap-2">
+        <% %w[top-left top-center top-right bottom-left bottom-center bottom-right].each do |corner| %>
+          <button
+            herb-key="<%= corner %>"
+            type="button"
+            data-herb-set="position='<%= corner %>'"
+            class="rounded-lg border px-3 py-1.5 text-sm font-medium transition <%= position == corner ? "border-lime-600 bg-lime-50 text-lime-700" : "border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50" %>"
+          >
+            <%= corner %>
+          </button>
+        <% end %>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="mb-1 text-sm font-semibold text-gray-900">What the behavior writes</h2>
+      <p class="mb-4 text-sm text-gray-500">
+        Nothing here is styled by the package. Each toast carries its place in the stack, the distance it should sit
+        from the anchored edge and its collapsed scale, and the stylesheet turns those into a translate.
+      </p>
+
+      <div class="overflow-x-auto rounded-xl border border-gray-200">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+            <tr>
+              <th class="px-4 py-2 font-medium">Property</th>
+              <th class="px-4 py-2 font-medium">Holds</th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-gray-100">
+            <% [
+              ["--moly-toast-index", "its place in the stack, 0 at the front"],
+              ["--moly-toast-y", "how far it sits from the anchored edge, already signed"],
+              ["--moly-toast-scale", "the collapsed scale, 1 once expanded"],
+              ["--moly-toast-swipe-x", "the live swipe offset"],
+              ["--moly-toaster-front-height", "the front toast's measured height"],
+              ["--moly-toaster-gap", "the gap between toasts"],
+            ].each do |name, holds| %>
+              <tr>
+                <td class="px-4 py-2 font-mono text-xs text-gray-900"><%= name %></td>
+                <td class="px-4 py-2 text-gray-500"><%= holds %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="text-sm text-gray-500">
+      The same package ships the <a href="/drawers" class="font-medium text-lime-700 hover:underline">drawer</a>, and
+      both are registered by one <code class="rounded bg-gray-100 px-1">install()</code> call against the Herb runtime.
+    </p>
+  </div>
+
+  <ol data-moly-toaster="<%= position %>">
+    <% flash.each do |kind, message| %>
+      <li data-moly-toast="<%= kind %>">
+        <div data-moly-toast-content>
+          <div data-moly-toast-title><%= message %></div>
+        </div>
+      </li>
+    <% end %>
+  </ol>
+</div>

@@ -27,7 +27,7 @@ module Ops
   end
 
   def self.regions
-    latencies = ["Frankfurt", "Zurich", "Virginia", "Singapore"].map { |name| [name, rand(40..220)] }
+    latencies = [ "Frankfurt", "Zurich", "Virginia", "Singapore" ].map { |name| [ name, rand(40..220) ] }
     slowest = latencies.map(&:last).max
 
     latencies.map do |name, latency|
@@ -52,10 +52,10 @@ module Ops
     pulse = { id: "pulse", kind: "pulse", icon: "💚", text: "Health check passed across all regions", actor: "monitor", at: "just now, at #{Time.current.strftime("%H:%M:%S")}" }
     events = kind.to_s.empty? ? EVENTS : EVENTS.select { |event| event[:kind] == kind }
 
-    kind.to_s.empty? ? [pulse, *events] : events
+    kind.to_s.empty? ? [ pulse, *events ] : events
   end
 
   def self.feed_kinds
-    [["", "All"], ["deploy", "Deploys"], ["merge", "Merges"], ["alert", "Alerts"], ["signup", "Milestones"]]
+    [ [ "", "All" ], [ "deploy", "Deploys" ], [ "merge", "Merges" ], [ "alert", "Alerts" ], [ "signup", "Milestones" ] ]
   end
 end

@@ -10,7 +10,7 @@ ReActionView.configure do |config|
 
   config.transform_visitors = [
     Herb::Engine::ScopedStyle::Visitor.new,
-    Herb::Engine::SourceAttributionVisitor.new,
+    Herb::Engine::SourceAttributionVisitor.new
     # Herb::Engine::Validators::SecurityValidator.new(fatal: true)
   ]
 end
