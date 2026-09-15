@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "moly-ui/themes/default/toast.css";
+@import "moly-ui/themes/default.css";
 
 @layer base {
   button:not(:disabled),

@@ -33,7 +33,6 @@
   data-moly-drawer-overlay
   data-moly-drawer-open="<%= panel %>"
   data-herb-set="panel=false"
-  class="pointer-events-none fixed inset-0 z-30 bg-gray-900/45 opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] data-[moly-drawer-open=true]:pointer-events-auto data-[moly-drawer-open=true]:opacity-100"
 ></div>
 
 <aside
@@ -42,11 +41,11 @@
   data-moly-drawer-snap="0.45, 0.68, 0.92"
   data-moly-drawer-snap-state="height"
   data-moly-drawer-open="<%= panel %>"
-  class="fixed inset-x-0 bottom-0 z-40 flex h-[92svh] translate-y-full flex-col rounded-t-2xl bg-white shadow-[0_-12px_40px_rgb(0_0_0/0.25)] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] will-change-transform data-[moly-drawer-open=true]:translate-y-0"
+  style="--moly-drawer-size: 92svh"
 >
-  <div data-moly-drawer-handle class="mx-auto mt-3 mb-1 h-[5px] w-8 flex-none cursor-grab rounded-full bg-gray-300"></div>
+  <div data-moly-drawer-handle></div>
 
-  <header data-moly-drawer-handle class="flex-none cursor-grab px-5 pb-3">
+  <header class="flex-none cursor-grab px-5 pb-3">
     <div class="flex items-baseline justify-between">
       <h2 class="text-lg font-bold">Up next</h2>
 
