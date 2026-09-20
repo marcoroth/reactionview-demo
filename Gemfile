@@ -31,7 +31,7 @@ gem "herb", github: "marcoroth/herb", branch: "main"
 gem "reactionview", github: "marcoroth/reactionview", branch: "main"
 
 # An extremely fast CSS parser, transformer, bundler, and minifier.
-gem "lightningcss", "~> 0.2.0"
+gem "lightningcss", "~> 1.33.0"
 gem "rolldown", "~> 0.1.1"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
