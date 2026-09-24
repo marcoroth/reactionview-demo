@@ -10,6 +10,10 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <% if Rails.env.production? %>
+      <script defer data-domain="demo.reactionview.dev" src="https://plausible.io/js/script.outbound-links.js"></script>
+    <% end %>
+
     <%= yield :head %>
 
     <link rel="icon" href="/icon.png" type="image/png">
