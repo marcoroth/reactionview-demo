@@ -187,13 +187,13 @@ GEM
       thor (~> 1.3)
       zeitwerk (>= 2.6.18, < 3.0)
     language_server-protocol (3.17.0.6)
-    lightningcss (0.2.0-aarch64-linux-gnu)
-    lightningcss (0.2.0-aarch64-linux-musl)
-    lightningcss (0.2.0-arm-linux-gnu)
-    lightningcss (0.2.0-arm-linux-musl)
-    lightningcss (0.2.0-arm64-darwin)
-    lightningcss (0.2.0-x86_64-linux-gnu)
-    lightningcss (0.2.0-x86_64-linux-musl)
+    lightningcss (1.33.0-aarch64-linux-gnu)
+    lightningcss (1.33.0-aarch64-linux-musl)
+    lightningcss (1.33.0-arm-linux-gnu)
+    lightningcss (1.33.0-arm-linux-musl)
+    lightningcss (1.33.0-arm64-darwin)
+    lightningcss (1.33.0-x86_64-linux-gnu)
+    lightningcss (1.33.0-x86_64-linux-musl)
     lint_roller (1.1.0)
     logger (1.7.0)
     loofah (2.25.2)
@@ -446,7 +446,7 @@ DEPENDENCIES
   jbuilder
   jsbundling-rails
   kamal
-  lightningcss (~> 0.2.0)
+  lightningcss (~> 1.33.0)
   propshaft
   puma (>= 5.0)
   rails (~> 8.1.3, >= 8.1.3.1)
@@ -534,13 +534,13 @@ CHECKSUMS
   json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
   kamal (2.12.0) sha256=c51d1ab085e515470f98d0c0f043637122b5ebf76e8b610cb1fbbed0b7f9b8fa
   language_server-protocol (3.17.0.6) sha256=5ef2c0c138f8267e1bc631d3328347d354f96724b0af22f2c79516120443b7f0
-  lightningcss (0.2.0-aarch64-linux-gnu) sha256=d60dd20888d32991f0596c92153c6ccbcba8d6818475b3dd7383e27514b38c55
-  lightningcss (0.2.0-aarch64-linux-musl) sha256=a521693773be6359b86dbf12191529c7d1516f4cb38dc7a6c5a7e63ae6495b2a
-  lightningcss (0.2.0-arm-linux-gnu) sha256=ffe8d7e76a08bfa07b5a072f9d223ac768426ce407c56d3b9db1da7d514993a0
-  lightningcss (0.2.0-arm-linux-musl) sha256=0b1ab795e16411308320c5488ef64cd3628e58e07f3e7ebcb43d12b435ca5d12
-  lightningcss (0.2.0-arm64-darwin) sha256=8a3434b6c30c05dd82437a6a747cb16969cf387767e11afabfb36fdf72689e7f
-  lightningcss (0.2.0-x86_64-linux-gnu) sha256=e24fc39a3e48a7a1dee72471085d43255da3d8677f495c0f7a50ce70407d0735
-  lightningcss (0.2.0-x86_64-linux-musl) sha256=f834241c1bec3b6cb80d0d1bcb9b045950e72bb781b97601cad9226a18cc2826
+  lightningcss (1.33.0-aarch64-linux-gnu) sha256=bee22a166bec37ea16a209730c0ffef8aee4dbf299548317be25ff77d28f3f02
+  lightningcss (1.33.0-aarch64-linux-musl) sha256=ddd7372937dfc6e2d92b9babf131f94b543f48f5593f3d60a8ce508570b8a8a7
+  lightningcss (1.33.0-arm-linux-gnu) sha256=8f6590a650b20cf1bdee263289bc9a06ab45afc6273f5ca48a73f21f3f2620ad
+  lightningcss (1.33.0-arm-linux-musl) sha256=56fe4464dc313da2c5125aeeef0c26b7a3cf6a82bf9a403ead94473f428e258d
+  lightningcss (1.33.0-arm64-darwin) sha256=bd4d63d50580cd745e7b9b51f5c46af92bc77a550c7d9a07851d79d98ec60352
+  lightningcss (1.33.0-x86_64-linux-gnu) sha256=33a6e8a61f3408fedd6c3d1f8b6cc0ec758cd2fb1d13598f270e7af7922bc524
+  lightningcss (1.33.0-x86_64-linux-musl) sha256=51fd0271328811b77bdd900b7a9bb808e6cc9c01f40315666925ada44e8997e4
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   loofah (2.25.2) sha256=2007f746959ac65552456e04b433e83deb22759ab38c838b4445c70e43425918
