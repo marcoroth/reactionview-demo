@@ -32,7 +32,7 @@ gem "reactionview", "~> 0.6.0"
 
 # An extremely fast CSS parser, transformer, bundler, and minifier.
 gem "lightningcss", "~> 1.33.0"
-gem "rolldown", "~> 1.2.9"
+gem "rolldown", "~> 1.2.12"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
