@@ -302,13 +302,13 @@ GEM
     reline (0.7.0)
       io-console (~> 0.5)
     rexml (3.4.4)
-    rolldown (1.2.9-aarch64-linux-gnu)
-    rolldown (1.2.9-aarch64-linux-musl)
-    rolldown (1.2.9-arm-linux-gnu)
-    rolldown (1.2.9-arm-linux-musl)
-    rolldown (1.2.9-arm64-darwin)
-    rolldown (1.2.9-x86_64-linux-gnu)
-    rolldown (1.2.9-x86_64-linux-musl)
+    rolldown (1.2.14-aarch64-linux-gnu)
+    rolldown (1.2.14-aarch64-linux-musl)
+    rolldown (1.2.14-arm-linux-gnu)
+    rolldown (1.2.14-arm-linux-musl)
+    rolldown (1.2.14-arm64-darwin)
+    rolldown (1.2.14-x86_64-linux-gnu)
+    rolldown (1.2.14-x86_64-linux-musl)
     rubocop (1.89.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -439,7 +439,7 @@ DEPENDENCIES
   puma (>= 5.0)
   rails (~> 8.1.3, >= 8.1.3.1)
   reactionview (~> 0.6.0)
-  rolldown (~> 1.2.9)
+  rolldown (~> 1.2.14)
   rubocop-rails-omakase
   selenium-webdriver
   solid_cable
@@ -580,13 +580,13 @@ CHECKSUMS
   regexp_parser (2.12.0) sha256=35a916a1d63190ab5c9009457136ae5f3c0c7512d60291d0d1378ba18ce08ebb
   reline (0.7.0) sha256=5b012d8e55dbf9d450f12bde2cf7d15ff546ae80b3f8f3b30e570d431815583d
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
-  rolldown (1.2.9-aarch64-linux-gnu) sha256=fe86b3915e9cf3601d23bd101670816aa173378a5b9ffc772e2a368fbc7dd91b
-  rolldown (1.2.9-aarch64-linux-musl) sha256=cb4e9ed5361e915b741e9c9bc1bd716c497d9f332365691c1be12cefe5007f11
-  rolldown (1.2.9-arm-linux-gnu) sha256=8b0b33db360649b0859d0ca221ba3c3adfabba9cc47311d90e02a4ff4a74b17c
-  rolldown (1.2.9-arm-linux-musl) sha256=8026fb8df6d9b4cf3e9b491703b1056ed2501c284f491b1ff7c16cb37ae522e9
-  rolldown (1.2.9-arm64-darwin) sha256=22e7fc2b9c3d294fc6a3c8d58cb9888e1b44c1f5b5e130619bb74d65424b11cc
-  rolldown (1.2.9-x86_64-linux-gnu) sha256=879adb09d28e9f73aedfed9690260e180ea0339761f9f7b752df8e1631e45a08
-  rolldown (1.2.9-x86_64-linux-musl) sha256=b884a01c8c80eb6d622f6bb796fb1251333be919d7c5612ce70d50738edca6cc
+  rolldown (1.2.14-aarch64-linux-gnu) sha256=8a1084cddfffecf91fe292831a70bd085c83323759c2db67b39326deeab53f2b
+  rolldown (1.2.14-aarch64-linux-musl) sha256=f0c9fb6505cde35fb480e759d6d4ca9e5cad2907a9ff297bbad2903c1b02e453
+  rolldown (1.2.14-arm-linux-gnu) sha256=4ef6f15ac887dba58cd0c75a1277d74ab94c8835d2b841b3079a6221bcf4758c
+  rolldown (1.2.14-arm-linux-musl) sha256=1cd180f328ce653e6d1798f24e0bc3247bb15557fa084173aba35f0d129ca0a3
+  rolldown (1.2.14-arm64-darwin) sha256=01b2cb546ff9e4fa76cfd07545ddb93ea7054141582c4d295bb75f6315871d43
+  rolldown (1.2.14-x86_64-linux-gnu) sha256=25ee59e8cf3a62c5303ec724e60251c2a2e68b980fd7cd1d3db8ffc06adeb307
+  rolldown (1.2.14-x86_64-linux-musl) sha256=f0eb35abc3a17ec8e1b83bfa5e77c6dd2551cfa5f705e5fa0ac6bfafea32a4b7
   rubocop (1.89.0) sha256=4dee8e3ee9c45e474834efd9e8d6fd031e8331c8dacdff0de4ad65ae0a6faae7
   rubocop-ast (1.50.0) sha256=b9ca88300da0803ee222ad20cdb30494c0a784eed06fdc35d254b06d662788db
   rubocop-performance (1.27.0) sha256=eeeb1374d062a368ee1c787b70eb0b0cc4b184cb1f8565f424760946146d61ce
